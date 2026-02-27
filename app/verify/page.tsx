@@ -58,7 +58,7 @@ const TRANSLATIONS = {
     skip: "Skip for now",
     back: "Back",
     continue: "Continue",
-    complete: "Complete Verification",
+    completeAction: "Complete Verification",
     phone: {
       title: "Verify Phone Number",
       subtitle: "Enter the OTP sent to your phone",
@@ -108,7 +108,7 @@ const TRANSLATIONS = {
     skip: "अभी के लिए छोड़ें",
     back: "वापस",
     continue: "जारी रखें",
-    complete: "सत्यापन पूरा करें",
+    completeAction: "सत्यापन पूरा करें",
     phone: {
       title: "फ़ोन नंबर सत्यापित करें",
       subtitle: "अपने फ़ोन पर भेजे गए OTP को दर्ज करें",
