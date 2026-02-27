@@ -111,9 +111,11 @@ interface TProps {
  * <T k="auth.welcome" component="h1" className="text-xl" />
  * <T k="onboarding.step_of" params={{ current: 1, total: 3 }} />
  */
-export function T({ k, params, className, component: Component = 'span', children }: TProps) {
+export function T({ k, params, className, component: As = 'span', children }: TProps) {
   const { t } = useTranslation();
   const translation = t(k, params);
+
+  const Component = As as React.ElementType;
 
   return (
     <Component className={className}>
