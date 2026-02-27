@@ -49,8 +49,6 @@ export const metadata: Metadata = {
   },
   description:
     "Bandhan AI uses artificial intelligence to help you find meaningful connections. Experience premium matchmaking designed for modern Indians.",
-  descriptionHi:
-    "बंधन एआई कृत्रिम बुद्धिमत्ता का उपयोग करके आपको सार्थक संबंध खोजने में मदद करता है। आधुनिक भारतीयों के लिए प्रीमियम मैचमेकिंग अनुभव करें।",
   keywords: [
     "matchmaking",
     "dating",
@@ -92,11 +90,8 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "Bandhan AI",
     title: "Bandhan AI - Find Your Perfect Match",
-    titleHi: "बंधन एआई - अपना सही मैच खोजें",
     description:
       "AI-powered matchmaking for meaningful connections. Designed for modern Indians seeking love and companionship.",
-    descriptionHi:
-      "सार्थक संबंधों के लिए एआई-संचालित मैचमेकिंग। प्यार और साथी की तलाश करने वाले आधुनिक भारतीयों के लिए डिज़ाइन किया गया।",
     images: [
       {
         url: "/og-image.png",
@@ -109,11 +104,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Bandhan AI - Find Your Perfect Match",
-    titleHi: "बंधन एआई - अपना सही मैच खोजें",
     description:
       "AI-powered matchmaking for meaningful connections. Designed for modern Indians.",
-    descriptionHi:
-      "सार्थक संबंधों के लिए एआई-संचालित मैचमेकिंग। आधुनिक भारतीयों के लिए डिज़ाइन किया गया।",
     creator: "@bandhanai",
   },
   robots: {
