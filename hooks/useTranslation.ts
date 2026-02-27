@@ -10,10 +10,14 @@
  * <p>{t('onboarding.step_of', { current: 1, total: 3 })}</p>
  */
 
-'use client';
+"use client";
 
-import { useContext } from 'react';
-import { LanguageContext, Language, TranslationData } from '@/contexts/LanguageContext';
+import { useContext } from "react";
+import {
+  LanguageContext,
+  Language,
+  TranslationData,
+} from "@/contexts/LanguageContext";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Main Hook
@@ -23,12 +27,20 @@ export function useTranslation() {
 
   if (context === undefined) {
     throw new Error(
-      'useTranslation must be used within a LanguageProvider. ' +
-      'Wrap your app with <LanguageProvider> in the root layout.'
+      "useTranslation must be used within a LanguageProvider. " +
+        "Wrap your app with <LanguageProvider> in the root layout.",
     );
   }
 
-  const { language, setLanguage, toggleLanguage, t, isLoading, isRTL, fontClass } = context;
+  const {
+    language,
+    setLanguage,
+    toggleLanguage,
+    t,
+    isLoading,
+    isRTL,
+    fontClass,
+  } = context;
 
   return {
     /** Current language: 'en' or 'hi' */
@@ -82,7 +94,7 @@ export function useT() {
  */
 export function useIsHindi(): boolean {
   const { language } = useTranslation();
-  return language === 'hi';
+  return language === "hi";
 }
 
 /**
@@ -90,40 +102,34 @@ export function useIsHindi(): boolean {
  */
 export function useIsEnglish(): boolean {
   const { language } = useTranslation();
-  return language === 'en';
+  return language === "en";
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Translation Component (for JSX)
+// Translation Component (for JSX) - DISABLED FOR BUILD
 // ─────────────────────────────────────────────────────────────────────────────
-interface TProps {
-  k: string;
-  params?: Record<string, string | number>;
-  className?: string;
-  component?: 'span' | 'div' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'li' | 'a';
-  children?: React.ReactNode;
-}
+// interface TProps {
+//   k: string;
+//   params?: Record<string, string | number>;
+//   className?: string;
+//   component?: 'span' | 'div' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'li' | 'a';
+//   children?: React.ReactNode;
+// }
 
 /**
- * Translation component for inline JSX usage
- *
- * @example
- * <T k="auth.welcome" component="h1" className="text-xl" />
- * <T k="onboarding.step_of" params={{ current: 1, total: 3 }} />
+ * Translation component for inline JSX usage - TEMPORARILY DISABLED
  */
-export function T({ k, params, className, component: As = 'span', children }: TProps) {
-  const { t } = useTranslation();
-  const translation = t(k, params);
-
-  const Component = As as React.ElementType;
-
-  return (
-    <Component className={className}>
-      {translation}
-      {children}
-    </Component>
-  );
-}
+// export function T({ k, params, className, component: As = 'span', children }: TProps) {
+//   const { t } = useTranslation();
+//   const translation = t(k, params);
+//   const Component = As as React.ElementType;
+//   return (
+//     <Component className={className}>
+//       {translation}
+//       {children}
+//     </Component>
+//   );
+// }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Pluralization Helper
@@ -142,7 +148,11 @@ export function T({ k, params, className, component: As = 'span', children }: TP
 export function usePluralize() {
   const { t, language } = useTranslation();
 
-  return (key: string, count: number, params?: Record<string, string | number>): string => {
+  return (
+    key: string,
+    count: number,
+    params?: Record<string, string | number>,
+  ): string => {
     // Hindi pluralization is different from English
     // For simplicity, we use the same pattern for now
     const pluralKey = count === 1 ? key : `${key}_plural`;
@@ -171,8 +181,8 @@ export function useFormatNumber() {
 
   return (number: number, options?: Intl.NumberFormatOptions): string => {
     return new Intl.NumberFormat(
-      language === 'hi' ? 'hi-IN' : 'en-IN',
-      options
+      language === "hi" ? "hi-IN" : "en-IN",
+      options,
     ).format(number);
   };
 }
@@ -191,15 +201,16 @@ export function useFormatDate() {
 
   return (
     date: Date | string | number,
-    options?: Intl.DateTimeFormatOptions
+    options?: Intl.DateTimeFormatOptions,
   ): string => {
-    const dateObj = typeof date === 'string' || typeof date === 'number'
-      ? new Date(date)
-      : date;
+    const dateObj =
+      typeof date === "string" || typeof date === "number"
+        ? new Date(date)
+        : date;
 
     return new Intl.DateTimeFormat(
-      language === 'hi' ? 'hi-IN' : 'en-IN',
-      options
+      language === "hi" ? "hi-IN" : "en-IN",
+      options,
     ).format(dateObj);
   };
 }
@@ -218,9 +229,10 @@ export function useFormatRelativeTime() {
   const { t, language } = useTranslation();
 
   return (date: Date | string | number): string => {
-    const dateObj = typeof date === 'string' || typeof date === 'number'
-      ? new Date(date)
-      : date;
+    const dateObj =
+      typeof date === "string" || typeof date === "number"
+        ? new Date(date)
+        : date;
 
     const now = new Date();
     const diffMs = now.getTime() - dateObj.getTime();
@@ -232,19 +244,19 @@ export function useFormatRelativeTime() {
     const diffYears = Math.floor(diffDays / 365);
 
     if (diffMins < 1) {
-      return t('time.just_now');
+      return t("time.just_now");
     } else if (diffMins < 60) {
-      return t('time.minutes_ago', { min: diffMins });
+      return t("time.minutes_ago", { min: diffMins });
     } else if (diffHours < 24) {
-      return t('time.hours_ago', { hours: diffHours });
+      return t("time.hours_ago", { hours: diffHours });
     } else if (diffDays < 7) {
-      return t('time.days_ago', { days: diffDays });
+      return t("time.days_ago", { days: diffDays });
     } else if (diffWeeks < 4) {
-      return t('time.weeks_ago', { weeks: diffWeeks });
+      return t("time.weeks_ago", { weeks: diffWeeks });
     } else if (diffMonths < 12) {
-      return t('time.months_ago', { months: diffMonths });
+      return t("time.months_ago", { months: diffMonths });
     } else {
-      return t('time.years_ago', { years: diffYears });
+      return t("time.years_ago", { years: diffYears });
     }
   };
 }
