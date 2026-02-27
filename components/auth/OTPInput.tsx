@@ -288,10 +288,10 @@ export function OTPInput({
           );
         } else {
           setError(
-            `${ERROR_MESSAGES.invalidOTP.en} (${ERROR_MESSAGES.retryAttemptsRemaining(remaining)})`,
+            `${ERROR_MESSAGES.invalidOTP.en} (${ERROR_MESSAGES.retryAttemptsRemaining.en(remaining)})`,
           );
           setErrorHi(
-            `${ERROR_MESSAGES.invalidOTP.hi} (${ERROR_MESSAGES.retryAttemptsRemaining(remaining)})`,
+            `${ERROR_MESSAGES.invalidOTP.hi} (${ERROR_MESSAGES.retryAttemptsRemaining.hi(remaining)})`,
           );
         }
         // Reset form for retry
