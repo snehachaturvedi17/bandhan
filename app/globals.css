@@ -1,0 +1,667 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────────────────
+   Font Imports
+   ────────────────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.cdnfonts.com/css/clash-display?styles=62293,62294,62295,62296,62297,62298");
+
+/* ──────────────────────────────────────────────────────────────────────
+   CSS Custom Properties (Design Tokens)
+   ────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Brand Colors */
+    --color-midnight-50: #e8eaf0;
+    --color-midnight-100: #c5c9d8;
+    --color-midnight-200: #9ea5be;
+    --color-midnight-300: #7780a4;
+    --color-midnight-400: #575f8f;
+    --color-midnight-500: #373f7a;
+    --color-midnight-600: #2b3166;
+    --color-midnight-700: #1e2252;
+    --color-midnight-800: #13163d;
+    --color-midnight-900: #0a0e17;
+    --color-midnight-950: #050710;
+
+    --color-saffron-50: #fff5e6;
+    --color-saffron-100: #ffe5bf;
+    --color-saffron-200: #ffd699;
+    --color-saffron-300: #ffc266;
+    --color-saffron-400: #ffad33;
+    --color-saffron-500: #ff9933;
+    --color-saffron-600: #e67a00;
+    --color-saffron-700: #b35e00;
+    --color-saffron-800: #804400;
+    --color-saffron-900: #4d2900;
+
+    --color-violet-50: #f3f2ff;
+    --color-violet-100: #e5e3ff;
+    --color-violet-200: #cdc9ff;
+    --color-violet-300: #b5b0ff;
+    --color-violet-400: #a29bfe;
+    --color-violet-500: #8f87fd;
+    --color-violet-600: #7b72fc;
+    --color-violet-700: #5e55e0;
+    --color-violet-800: #4239b3;
+    --color-violet-900: #281e86;
+
+    --color-rose-400: #fe9dc4;
+    --color-rose-500: #fd79a8;
+    --color-rose-600: #e05585;
+
+    --color-gold-400: #fbd44f;
+    --color-gold-500: #f9ca24;
+    --color-gold-600: #d4a800;
+
+    /* Spacing Scale (4px baseline) */
+    --space-0: 0;
+    --space-1: 0.25rem; /* 4px */
+    --space-2: 0.5rem; /* 8px */
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem; /* 16px */
+    --space-5: 1.25rem; /* 20px */
+    --space-6: 1.5rem; /* 24px */
+    --space-7: 1.75rem; /* 28px */
+    --space-8: 2rem; /* 32px */
+    --space-9: 2.25rem; /* 36px */
+    --space-10: 2.5rem; /* 40px */
+    --space-11: 2.75rem; /* 44px */
+    --space-12: 3rem; /* 48px */
+    --space-14: 3.5rem; /* 56px */
+    --space-16: 4rem; /* 64px */
+    --space-20: 5rem; /* 80px */
+    --space-24: 6rem; /* 96px */
+    --space-28: 7rem; /* 112px */
+    --space-32: 8rem; /* 128px */
+    --space-36: 9rem; /* 144px */
+    --space-40: 10rem; /* 160px */
+    --space-44: 11rem; /* 176px */
+    --space-48: 12rem; /* 192px */
+    --space-52: 13rem; /* 208px */
+    --space-56: 14rem; /* 224px */
+    --space-60: 15rem; /* 240px */
+    --space-64: 16rem; /* 256px */
+    --space-72: 18rem; /* 288px */
+    --space-80: 20rem; /* 320px */
+    --space-96: 24rem; /* 384px */
+
+    /* Typography Scale */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --font-size-5xl: 3rem;
+    --font-size-6xl: 3.75rem;
+    --font-size-7xl: 4.5rem;
+    --font-size-8xl: 6rem;
+    --font-size-9xl: 8rem;
+
+    /* Font Families */
+    --font-sans:
+        "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+    --font-display: "Clash Display", "Playfair Display", Georgia, serif;
+    --font-hindi: "Noto Sans Devanagari", system-ui, sans-serif;
+    --font-mono:
+        "JetBrains Mono", "Fira Code", "SF Mono", Monaco, "Cascadia Code",
+        monospace;
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-4xl: 2rem;
+    --radius-5xl: 2.5rem;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-glass: 0 8px 32px 0 rgba(10, 14, 23, 0.37);
+    --shadow-glass-sm: 0 4px 16px 0 rgba(10, 14, 23, 0.25);
+    --shadow-glass-lg: 0 16px 48px 0 rgba(10, 14, 23, 0.5);
+    --shadow-saffron-glow: 0 0 24px 4px rgba(255, 153, 51, 0.35);
+    --shadow-violet-glow: 0 0 24px 4px rgba(162, 155, 254, 0.35);
+    --shadow-rose-glow: 0 0 24px 4px rgba(253, 121, 168, 0.35);
+    --shadow-card:
+        0 2px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
+    --shadow-card-hover:
+        0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.12);
+
+    /* Z-Index Scale */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    --z-toast: 1080;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Base Styles
+   ────────────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-midnight-50);
+    background: linear-gradient(
+        135deg,
+        var(--color-midnight-900) 0%,
+        var(--color-midnight-800) 25%,
+        var(--color-violet-900) 50%,
+        var(--color-midnight-800) 75%,
+        var(--color-midnight-900) 100%
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Typography
+   ────────────────────────────────────────────────────────────────────── */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: var(--space-4);
+    color: var(--color-midnight-50);
+}
+
+h1 {
+    font-size: var(--font-size-5xl);
+}
+h2 {
+    font-size: var(--font-size-4xl);
+}
+h3 {
+    font-size: var(--font-size-3xl);
+}
+h4 {
+    font-size: var(--font-size-2xl);
+}
+h5 {
+    font-size: var(--font-size-xl);
+}
+h6 {
+    font-size: var(--font-size-lg);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--space-4);
+}
+
+a {
+    color: var(--color-violet-400);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-saffron-400);
+}
+
+/* Hindi Text Support */
+.hindi-text {
+    font-family: var(--font-hindi);
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Glassmorphism Classes
+   ────────────────────────────────────────────────────────────────────── */
+.glass {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-glass);
+}
+
+.glass-sm {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px) saturate(160%);
+    -webkit-backdrop-filter: blur(8px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: var(--shadow-glass-sm);
+}
+
+.glass-md {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-glass-lg);
+}
+
+.glass-dark {
+    background: rgba(10, 14, 23, 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+.glass-saffron {
+    background: rgba(255, 153, 51, 0.1);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 153, 51, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(255, 153, 51, 0.15);
+}
+
+.glass-violet {
+    background: rgba(162, 155, 254, 0.1);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(162, 155, 254, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(162, 155, 254, 0.15);
+}
+
+.glass-rose {
+    background: rgba(253, 121, 168, 0.1);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(253, 121, 168, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(253, 121, 168, 0.15);
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Custom Scrollbar Styles
+   ────────────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-midnight-900);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        180deg,
+        var(--color-saffron-500) 0%,
+        var(--color-violet-500) 100%
+    );
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-midnight-900);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        180deg,
+        var(--color-saffron-400) 0%,
+        var(--color-violet-400) 100%
+    );
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--color-midnight-900);
+}
+
+/* Firefox Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-saffron-500) var(--color-midnight-900);
+}
+
+/* Scrollbar Hide Utility */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Gradient Backgrounds
+   ────────────────────────────────────────────────────────────────────── */
+.gradient-brand {
+    background: linear-gradient(135deg, #0a0e17 0%, #1a1040 50%, #0a0e17 100%);
+}
+
+.gradient-saffron {
+    background: linear-gradient(135deg, #ff9933 0%, #e67a00 100%);
+}
+
+.gradient-violet {
+    background: linear-gradient(135deg, #a29bfe 0%, #7b72fc 100%);
+}
+
+.gradient-premium {
+    background: linear-gradient(135deg, #f9ca24 0%, #ff9933 50%, #fd79a8 100%);
+}
+
+.gradient-hero {
+    background:
+        radial-gradient(
+            ellipse at 60% 20%,
+            rgba(162, 155, 254, 0.18) 0%,
+            transparent 60%
+        ),
+        radial-gradient(
+            ellipse at 20% 80%,
+            rgba(255, 153, 51, 0.12) 0%,
+            transparent 50%
+        ),
+        linear-gradient(180deg, #0a0e17 0%, #130d2e 100%);
+}
+
+.gradient-card {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.02) 100%
+    );
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Text Gradients
+   ────────────────────────────────────────────────────────────────────── */
+.text-gradient-brand {
+    background: linear-gradient(135deg, #ff9933 0%, #a29bfe 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-premium {
+    background: linear-gradient(135deg, #f9ca24 0%, #ff9933 50%, #fd79a8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-saffron {
+    background: linear-gradient(135deg, #ff9933 0%, #e67a00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Shimmer Animation
+   ────────────────────────────────────────────────────────────────────── */
+.shimmer-bg {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.06) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.5s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Safe Area Insets (Mobile)
+   ────────────────────────────────────────────────────────────────────── */
+.safe-top {
+    padding-top: env(safe-area-inset-top);
+}
+
+.safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Selection Styles
+   ────────────────────────────────────────────────────────────────────── */
+::selection {
+    background-color: var(--color-saffron-500);
+    color: var(--color-midnight-900);
+}
+
+::-moz-selection {
+    background-color: var(--color-saffron-500);
+    color: var(--color-midnight-900);
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Focus Styles
+   ────────────────────────────────────────────────────────────────────── */
+:focus-visible {
+    outline: 2px solid var(--color-violet-400);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Utility Classes
+   ────────────────────────────────────────────────────────────────────── */
+.text-balance {
+    text-wrap: balance;
+}
+
+.pointer-events-none {
+    pointer-events: none;
+}
+
+.pointer-events-auto {
+    pointer-events: auto;
+}
+
+/* Prevent focus zoom on iOS */
+@media screen and (max-width: 767px) {
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Smooth image rendering */
+img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Verification Badge Animations
+   ────────────────────────────────────────────────────────────────────── */
+
+/* Gold Badge Pulse Effect (subtle, not distracting) */
+@keyframes badge-pulse-gold {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(255, 215, 0, 0);
+    }
+}
+
+.verification-badge-gold {
+    animation: badge-pulse-gold 2s ease-in-out infinite;
+}
+
+/* Gold Badge Shine Effect */
+@keyframes badge-shine {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.verification-badge-shine {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: badge-shine 2s linear infinite;
+}
+
+/* Bronze Badge Subtle Glow */
+@keyframes badge-glow-bronze {
+    0%,
+    100% {
+        box-shadow: 0 0 4px 0 rgba(205, 127, 50, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 8px 2px rgba(205, 127, 50, 0.5);
+    }
+}
+
+.verification-badge-bronze {
+    animation: badge-glow-bronze 3s ease-in-out infinite;
+}
+
+/* Silver Badge Subtle Glow */
+@keyframes badge-glow-silver {
+    0%,
+    100% {
+        box-shadow: 0 0 4px 0 rgba(192, 192, 192, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 8px 2px rgba(192, 192, 192, 0.5);
+    }
+}
+
+.verification-badge-silver {
+    animation: badge-glow-silver 3s ease-in-out infinite;
+}
+
+/* Verification Step Completion Animation */
+@keyframes step-complete {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.verification-step-complete {
+    animation: step-complete 0.4s ease-out;
+}
+
+/* Progress Bar Fill Animation */
+@keyframes progress-fill {
+    from {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.verification-progress-fill {
+    animation: progress-fill 0.5s ease-out;
+}
+
+/* Badge Entrance Animation */
+@keyframes badge-entrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-10deg);
+    }
+    60% {
+        transform: scale(1.1) rotate(5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.verification-badge-entrance {
+    animation: badge-entrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Tooltip Fade In */
+@keyframes tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.verification-tooltip {
+    animation: tooltip-fade-in 0.15s ease-out;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .verification-badge-gold,
+    .verification-badge-bronze,
+    .verification-badge-silver,
+    .verification-badge-shine,
+    .verification-step-complete,
+    .verification-progress-fill,
+    .verification-badge-entrance,
+    .verification-tooltip {
+        animation: none;
+    }
+}

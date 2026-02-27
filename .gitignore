@@ -1,0 +1,1551 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# Bandhan AI - Git Ignore Configuration
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment Variables (CRITICAL - Never commit secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+
+# Build Outputs
+.next/
+out/
+build/
+dist/
+.nuxt/
+.output/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+jest-results.json
+test-results/
+playwright-report/
+playwright/.cache/
+
+# IDE and Editor Files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime Data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary Files
+tmp/
+temp/
+.cache/
+.parcel-cache/
+
+# Uploads and User Generated Content
+uploads/
+user-content/
+media/
+*.pem
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+prisma/migrations/
+
+# Testing Certificates
+*.crt
+*.key
+*.p12
+
+# Vercel
+.vercel
+
+# Sentry
+.sentryclirc
+
+# ESLint
+.eslintcache
+
+# Stylelint
+.stylelintcache
+
+# Prettier
+.prettierrc.lock
+
+# Storybook
+storybook-static/
+
+# GraphQL
+*.graphqls
+*.graphql
+
+# OpenAPI
+swagger-ui/
+
+# Documentation
+docs/_build/
+site/
+
+# Performance
+.turbo/
+
+# Bundle Analysis
+.stats.json
+*.bundle.js.map
+
+# Sentry
+.sentryclirc
+
+# Playwright
+playwright-report/
+playwright/.cache/
+
+# Component Libraries
+.chromatic/
+
+# Local Development
+localhost/
+*.local
+
+# Backup Files
+*.bak
+*.backup
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Package Manager Lock Files (Keep one based on your package manager)
+# Uncomment the ones you don't use:
+# package-lock.json  # If using yarn or pnpm
+# yarn.lock          # If using npm or pnpm
+# pnpm-lock.yaml     # If using npm or yarn
+
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# AWS
+.aws/
+*.credentials
+
+# Razorpay
+razorpay-*.json
+
+# DigiLocker
+digilocker-*.json
+
+# SSL Certificates (Development)
+ssl/
+certificates/
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# Kubernetes
+*.kubeconfig
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Ansible
+*.retry
+
+# Vagrant
+.vagrant/
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Go
+*.exe
+*.test
+*.out
+
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock
+
+# Swift
+*.xcodeproj/
+*.xcworkspace/
+build/
+DerivedData/
+
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+
+# React Native
+*.hprof
+*.jks
+*.keystore
+
+# Sentry
+.sentryclirc
+
+# Husky
+.husky/
+
+# Commitlint
+.commitlintrc.json
+
+# Lint Staged
+.lintstagedrc.js
+
+# Release
+.release.json
+CHANGELOG.md
+
+# Benchmark
+benchmark/
+
+# Fixtures
+fixtures/
+
+# Seeds
+seeds/
+
+# Scripts
+scripts/*.log
+
+# Tools
+tools/*.log
+
+# Utils
+utils/*.log
+
+# Helpers
+helpers/*.log
+
+# Lib
+lib/*.log
+lib/**/*.log
+
+# Source
+src/*.log
+src/**/*.log
+
+# App
+app/*.log
+app/**/*.log
+
+# Pages
+pages/*.log
+pages/**/*.log
+
+# Components
+components/*.log
+components/**/*.log
+
+# Hooks
+hooks/*.log
+hooks/**/*.log
+
+# Context
+context/*.log
+context/**/*.log
+
+# Store
+store/*.log
+store/**/*.log
+
+# Types
+types/*.log
+types/**/*.log
+
+# Interfaces
+interfaces/*.log
+interfaces/**/*.log
+
+# Constants
+constants/*.log
+constants/**/*.log
+
+# Config
+config/*.log
+config/**/*.log
+
+# Public
+public/*.log
+public/**/*.log
+
+# Styles
+styles/*.log
+styles/**/*.log
+
+# Assets
+assets/*.log
+assets/**/*.log
+
+# Images
+images/*.log
+images/**/*.log
+
+# Fonts
+fonts/*.log
+fonts/**/*.log
+
+# Icons
+icons/*.log
+icons/**/*.log
+
+# SVGs
+svgs/*.log
+svgs/**/*.log
+
+# Videos
+videos/*.log
+videos/**/*.log
+
+# Audio
+audio/*.log
+audio/**/*.log
+
+# Documents
+documents/*.log
+documents/**/*.log
+
+# PDFs
+pdfs/*.log
+pdfs/**/*.log
+
+# Exports
+exports/*.log
+exports/**/*.log
+
+# Imports
+imports/*.log
+imports/**/*.log
+
+# Modules
+modules/*.log
+modules/**/*.log
+
+# Packages
+packages/*.log
+packages/**/*.log
+
+# Plugins
+plugins/*.log
+plugins/**/*.log
+
+# Extensions
+extensions/*.log
+extensions/**/*.log
+
+# Addons
+addons/*.log
+addons/**/*.log
+
+# Integrations
+integrations/*.log
+integrations/**/*.log
+
+# APIs
+apis/*.log
+apis/**/*.log
+
+# Services
+services/*.log
+services/**/*.log
+
+# Repositories
+repositories/*.log
+repositories/**/*.log
+
+# Controllers
+controllers/*.log
+controllers/**/*.log
+
+# Models
+models/*.log
+models/**/*.log
+
+# Views
+views/*.log
+views/**/*.log
+
+# Templates
+templates/*.log
+templates/**/*.log
+
+# Partials
+partials/*.log
+partials/**/*.log
+
+# Layouts
+layouts/*.log
+layouts/**/*.log
+
+# Middleware
+middleware/*.log
+middleware/**/*.log
+
+# Routes
+routes/*.log
+routes/**/*.log
+
+# Navigation
+navigation/*.log
+navigation/**/*.log
+
+# Menus
+menus/*.log
+menus/**/*.log
+
+# Footer
+footer/*.log
+footer/**/*.log
+
+# Header
+header/*.log
+header/**/*.log
+
+# Sidebar
+sidebar/*.log
+sidebar/**/*.log
+
+# Modal
+modal/*.log
+modal/**/*.log
+
+# Dialog
+dialog/*.log
+dialog/**/*.log
+
+# Toast
+toast/*.log
+toast/**/*.log
+
+# Notification
+notification/*.log
+notification/**/*.log
+
+# Alert
+alert/*.log
+alert/**/*.log
+
+# Banner
+banner/*.log
+banner/**/*.log
+
+# Card
+card/*.log
+card/**/*.log
+
+# Table
+table/*.log
+table/**/*.log
+
+# List
+list/*.log
+list/**/*.log
+
+# Grid
+grid/*.log
+grid/**/*.log
+
+# Form
+form/*.log
+form/**/*.log
+
+# Input
+input/*.log
+input/**/*.log
+
+# Button
+button/*.log
+button/**/*.log
+
+# Link
+link/*.log
+link/**/*.log
+
+# Image
+image/*.log
+image/**/*.log
+
+# Video
+video/*.log
+video/**/*.log
+
+# Audio
+audio/*.log
+audio/**/*.log
+
+# File
+file/*.log
+file/**/*.log
+
+# Upload
+upload/*.log
+upload/**/*.log
+
+# Download
+download/*.log
+download/**/*.log
+
+# Search
+search/*.log
+search/**/*.log
+
+# Filter
+filter/*.log
+filter/**/*.log
+
+# Sort
+sort/*.log
+sort/**/*.log
+
+# Pagination
+pagination/*.log
+pagination/**/*.log
+
+# Infinite Scroll
+infinite-scroll/*.log
+infinite-scroll/**/*.log
+
+# Lazy Load
+lazy-load/*.log
+lazy-load/**/*.log
+
+# Skeleton
+skeleton/*.log
+skeleton/**/*.log
+
+# Spinner
+spinner/*.log
+spinner/**/*.log
+
+# Progress
+progress/*.log
+progress/**/*.log
+
+# Step
+step/*.log
+step/**/*.log
+
+# Wizard
+wizard/*.log
+wizard/**/*.log
+
+# Timeline
+timeline/*.log
+timeline/**/*.log
+
+# Calendar
+calendar/*.log
+calendar/**/*.log
+
+# Date Picker
+date-picker/*.log
+date-picker/**/*.log
+
+# Time Picker
+time-picker/*.log
+time-picker/**/*.log
+
+# DateTime Picker
+datetime-picker/*.log
+datetime-picker/**/*.log
+
+# Range Picker
+range-picker/*.log
+range-picker/**/*.log
+
+# Color Picker
+color-picker/*.log
+color-picker/**/*.log
+
+# Icon Picker
+icon-picker/*.log
+icon-picker/**/*.log
+
+# Emoji Picker
+emoji-picker/*.log
+emoji-picker/**/*.log
+
+# Avatar
+avatar/*.log
+avatar/**/*.log
+
+# Badge
+badge/*.log
+badge/**/*.log
+
+# Tag
+tag/*.log
+tag/**/*.log
+
+# Chip
+chip/*.log
+chip/**/*.log
+
+# Pill
+pill/*.log
+pill/**/*.log
+
+# Tooltip
+tooltip/*.log
+tooltip/**/*.log
+
+# Popover
+popover/*.log
+popover/**/*.log
+
+# Dropdown
+dropdown/*.log
+dropdown/**/*.log
+
+# Select
+select/*.log
+select/**/*.log
+
+# Combobox
+combobox/*.log
+combobox/**/*.log
+
+# Autocomplete
+autocomplete/*.log
+autocomplete/**/*.log
+
+# Multiselect
+multiselect/*.log
+multiselect/**/*.log
+
+# Tree Select
+tree-select/*.log
+tree-select/**/*.log
+
+# Cascader
+cascader/*.log
+cascader/**/*.log
+
+# Transfer
+transfer/*.log
+transfer/**/*.log
+
+# Slider
+slider/*.log
+slider/**/*.log
+
+# Switch
+switch/*.log
+switch/**/*.log
+
+# Checkbox
+checkbox/*.log
+checkbox/**/*.log
+
+# Radio
+radio/*.log
+radio/**/*.log
+
+# Toggle
+toggle/*.log
+toggle/**/*.log
+
+# Rate
+rate/*.log
+rate/**/*.log
+
+# Upload
+upload/*.log
+upload/**/*.log
+
+# Crop
+crop/*.log
+crop/**/*.log
+
+# Resize
+resize/*.log
+resize/**/*.log
+
+# Rotate
+rotate/*.log
+rotate/**/*.log
+
+# Flip
+flip/*.log
+flip/**/*.log
+
+# Mirror
+mirror/*.log
+mirror/**/*.log
+
+# Filter
+filter/*.log
+filter/**/*.log
+
+# Effect
+effect/*.log
+effect/**/*.log
+
+# Animation
+animation/*.log
+animation/**/*.log
+
+# Transition
+transition/*.log
+transition/**/*.log
+
+# Transform
+transform/*.log
+transform/**/*.log
+
+# Motion
+motion/*.log
+motion/**/*.log
+
+# Gesture
+gesture/*.log
+gesture/**/*.log
+
+# Touch
+touch/*.log
+touch/**/*.log
+
+# Swipe
+swipe/*.log
+swipe/**/*.log
+
+# Pinch
+pinch/*.log
+pinch/**/*.log
+
+# Zoom
+zoom/*.log
+zoom/**/*.log
+
+# Pan
+pan/*.log
+pan/**/*.log
+
+# Drag
+drag/*.log
+drag/**/*.log
+
+# Drop
+drop/*.log
+drop/**/*.log
+
+# Scroll
+scroll/*.log
+scroll/**/*.log
+
+# Resize
+resize/*.log
+resize/**/*.log
+
+# Observe
+observe/*.log
+observe/**/*.log
+
+# Intersection
+intersection/*.log
+intersection/**/*.log
+
+# Mutation
+mutation/*.log
+mutation/**/*.log
+
+# Resize Observer
+resize-observer/*.log
+resize-observer/**/*.log
+
+# Performance
+performance/*.log
+performance/**/*.log
+
+# Memory
+memory/*.log
+memory/**/*.log
+
+# Network
+network/*.log
+network/**/*.log
+
+# Storage
+storage/*.log
+storage/**/*.log
+
+# Cache
+cache/*.log
+cache/**/*.log
+
+# Queue
+queue/*.log
+queue/**/*.log
+
+# Worker
+worker/*.log
+worker/**/*.log
+
+# Service Worker
+service-worker/*.log
+service-worker/**/*.log
+
+# Web Worker
+web-worker/*.log
+web-worker/**/*.log
+
+# Shared Worker
+shared-worker/*.log
+shared-worker/**/*.log
+
+# Thread
+thread/*.log
+thread/**/*.log
+
+# Process
+process/*.log
+process/**/*.log
+
+# Child Process
+child-process/*.log
+child-process/**/*.log
+
+# Cluster
+cluster/*.log
+cluster/**/*.log
+
+# Fork
+fork/*.log
+fork/**/*.log
+
+# Spawn
+spawn/*.log
+spawn/**/*.log
+
+# Exec
+exec/*.log
+exec/**/*.log
+
+# Shell
+shell/*.log
+shell/**/*.log
+
+# Terminal
+terminal/*.log
+terminal/**/*.log
+
+# Console
+console/*.log
+console/**/*.log
+
+# Debug
+debug/*.log
+debug/**/*.log
+
+# Trace
+trace/*.log
+trace/**/*.log
+
+# Profile
+profile/*.log
+profile/**/*.log
+
+# Benchmark
+benchmark/*.log
+benchmark/**/*.log
+
+# Test
+test/*.log
+test/**/*.log
+
+# Spec
+spec/*.log
+spec/**/*.log
+
+# Suite
+suite/*.log
+suite/**/*.log
+
+# Case
+case/*.log
+case/**/*.log
+
+# Scenario
+scenario/*.log
+scenario/**/*.log
+
+# Feature
+feature/*.log
+feature/**/*.log
+
+# Story
+story/*.log
+story/**/*.log
+
+# Example
+example/*.log
+example/**/*.log
+
+# Demo
+demo/*.log
+demo/**/*.log
+
+# Sample
+sample/*.log
+sample/**/*.log
+
+# Mock
+mock/*.log
+mock/**/*.log
+
+# Stub
+stub/*.log
+stub/**/*.log
+
+# Fake
+fake/*.log
+fake/**/*.log
+
+# Spy
+spy/*.log
+spy/**/*.log
+
+# Monitor
+monitor/*.log
+monitor/**/*.log
+
+# Watch
+watch/*.log
+watch/**/*.log
+
+# Listen
+listen/*.log
+listen/**/*.log
+
+# Emit
+emit/*.log
+emit/**/*.log
+
+# Event
+event/*.log
+event/**/*.log
+
+# Listener
+listener/*.log
+listener/**/*.log
+
+# Handler
+handler/*.log
+handler/**/*.log
+
+# Callback
+callback/*.log
+callback/**/*.log
+
+# Promise
+promise/*.log
+promise/**/*.log
+
+# Async
+async/*.log
+async/**/*.log
+
+# Await
+await/*.log
+await/**/*.log
+
+# Generator
+generator/*.log
+generator/**/*.log
+
+# Iterator
+iterator/*.log
+iterator/**/*.log
+
+# Iterable
+iterable/*.log
+iterable/**/*.log
+
+# Map
+map/*.log
+map/**/*.log
+
+# Set
+set/*.log
+set/**/*.log
+
+# WeakMap
+weakmap/*.log
+weakmap/**/*.log
+
+# WeakSet
+weakset/*.log
+weakset/**/*.log
+
+# Array
+array/*.log
+array/**/*.log
+
+# Object
+object/*.log
+object/**/*.log
+
+# String
+string/*.log
+string/**/*.log
+
+# Number
+number/*.log
+number/**/*.log
+
+# Boolean
+boolean/*.log
+boolean/**/*.log
+
+# Symbol
+symbol/*.log
+symbol/**/*.log
+
+# BigInt
+bigint/*.log
+bigint/**/*.log
+
+# Null
+null/*.log
+null/**/*.log
+
+# Undefined
+undefined/*.log
+undefined/**/*.log
+
+# NaN
+nan/*.log
+nan/**/*.log
+
+# Infinity
+infinity/*.log
+infinity/**/*.log
+
+# Math
+math/*.log
+math/**/*.log
+
+# Date
+date/*.log
+date/**/*.log
+
+# Time
+time/*.log
+time/**/*.log
+
+# DateTime
+datetime/*.log
+datetime/**/*.log
+
+# Timestamp
+timestamp/*.log
+timestamp/**/*.log
+
+# Timezone
+timezone/*.log
+timezone/**/*.log
+
+# Locale
+locale/*.log
+locale/**/*.log
+
+# Language
+language/*.log
+language/**/*.log
+
+# Translation
+translation/*.log
+translation/**/*.log
+
+# i18n
+i18n/*.log
+i18n/**/*.log
+
+# l10n
+l10n/*.log
+l10n/**/*.log
+
+# RTL
+rtl/*.log
+rtl/**/*.log
+
+# LTR
+ltr/*.log
+ltr/**/*.log
+
+# Theme
+theme/*.log
+theme/**/*.log
+
+# Dark Mode
+dark-mode/*.log
+dark-mode/**/*.log
+
+# Light Mode
+light-mode/*.log
+light-mode/**/*.log
+
+# Color Scheme
+color-scheme/*.log
+color-scheme/**/*.log
+
+# Prefers Color Scheme
+prefers-color-scheme/*.log
+prefers-color-scheme/**/*.log
+
+# Media Query
+media-query/*.log
+media-query/**/*.log
+
+# Breakpoint
+breakpoint/*.log
+breakpoint/**/*.log
+
+# Responsive
+responsive/*.log
+responsive/**/*.log
+
+# Mobile
+mobile/*.log
+mobile/**/*.log
+
+# Tablet
+tablet/*.log
+tablet/**/*.log
+
+# Desktop
+desktop/*.log
+desktop/**/*.log
+
+# TV
+tv/*.log
+tv/**/*.log
+
+# Watch
+watch/*.log
+watch/**/*.log
+
+# VR
+vr/*.log
+vr/**/*.log
+
+# AR
+ar/*.log
+ar/**/*.log
+
+# MR
+mr/*.log
+mr/**/*.log
+
+# XR
+xr/*.log
+xr/**/*.log
+
+# Metaverse
+metaverse/*.log
+metaverse/**/*.log
+
+# Web3
+web3/*.log
+web3/**/*.log
+
+# Blockchain
+blockchain/*.log
+blockchain/**/*.log
+
+# Crypto
+crypto/*.log
+crypto/**/*.log
+
+# NFT
+nft/*.log
+nft/**/*.log
+
+# DeFi
+defi/*.log
+defi/**/*.log
+
+# DAO
+dao/*.log
+dao/**/*.log
+
+# Smart Contract
+smart-contract/*.log
+smart-contract/**/*.log
+
+# Solidity
+solidity/*.log
+solidity/**/*.log
+
+# Rust
+rust/*.log
+rust/**/*.log
+
+# Go
+go/*.log
+go/**/*.log
+
+# Python
+python/*.log
+python/**/*.log
+
+# Java
+java/*.log
+java/**/*.log
+
+# Kotlin
+kotlin/*.log
+kotlin/**/*.log
+
+# Swift
+swift/*.log
+swift/**/*.log
+
+# Objective-C
+objective-c/*.log
+objective-c/**/*.log
+
+# C++
+cpp/*.log
+cpp/**/*.log
+
+# C#
+csharp/*.log
+csharp/**/*.log
+
+# PHP
+php/*.log
+php/**/*.log
+
+# Ruby
+ruby/*.log
+ruby/**/*.log
+
+# Perl
+perl/*.log
+perl/**/*.log
+
+# Lua
+lua/*.log
+lua/**/*.log
+
+# Haskell
+haskell/*.log
+haskell/**/*.log
+
+# Scala
+scala/*.log
+scala/**/*.log
+
+# Clojure
+clojure/*.log
+clojure/**/*.log
+
+# Elixir
+elixir/*.log
+elixir/**/*.log
+
+# Erlang
+erlang/*.log
+erlang/**/*.log
+
+# F#
+fsharp/*.log
+fsharp/**/*.log
+
+# OCaml
+ocaml/*.log
+ocaml/**/*.log
+
+# Reason
+reason/*.log
+reason/**/*.log
+
+# TypeScript
+typescript/*.log
+typescript/**/*.log
+
+# JavaScript
+javascript/*.log
+javascript/**/*.log
+
+# ECMAScript
+ecmascript/*.log
+ecmascript/**/*.log
+
+# Node.js
+nodejs/*.log
+nodejs/**/*.log
+
+# Deno
+deno/*.log
+deno/**/*.log
+
+# Bun
+bun/*.log
+bun/**/*.log
+
+# Edge
+edge/*.log
+edge/**/*.log
+
+# Serverless
+serverless/*.log
+serverless/**/*.log
+
+# Lambda
+lambda/*.log
+lambda/**/*.log
+
+# Cloudflare
+cloudflare/*.log
+cloudflare/**/*.log
+
+# Vercel
+vercel/*.log
+vercel/**/*.log
+
+# Netlify
+netlify/*.log
+netlify/**/*.log
+
+# AWS
+aws/*.log
+aws/**/*.log
+
+# GCP
+gcp/*.log
+gcp/**/*.log
+
+# Azure
+azure/*.log
+azure/**/*.log
+
+# IBM Cloud
+ibm-cloud/*.log
+ibm-cloud/**/*.log
+
+# Oracle Cloud
+oracle-cloud/*.log
+oracle-cloud/**/*.log
+
+# Alibaba Cloud
+alibaba-cloud/*.log
+alibaba-cloud/**/*.log
+
+# Tencent Cloud
+tencent-cloud/*.log
+tencent-cloud/**/*.log
+
+# DigitalOcean
+digitalocean/*.log
+digitalocean/**/*.log
+
+# Linode
+linode/*.log
+linode/**/*.log
+
+# Vultr
+vultr/*.log
+vultr/**/*.log
+
+# Hetzner
+hetzner/*.log
+hetzner/**/*.log
+
+# OVH
+ovh/*.log
+ovh/**/*.log
+
+# Scaleway
+scaleway/*.log
+scaleway/**/*.log
+
+# UpCloud
+upcloud/*.log
+upcloud/**/*.log
+
+# Cloudinary
+cloudinary/*.log
+cloudinary/**/*.log
+
+# Imgix
+imgix/*.log
+imgix/**/*.log
+
+# Fastly
+fastly/*.log
+fastly/**/*.log
+
+# CloudFront
+cloudfront/*.log
+cloudfront/**/*.log
+
+# Akamai
+akamai/*.log
+akamai/**/*.log
+
+# KeyCDN
+keycdn/*.log
+keycdn/**/*.log
+
+# StackPath
+stackpath/*.log
+stackpath/**/*.log
+
+# BunnyCDN
+bunnycdn/*.log
+bunnycdn/**/*.log
+
+# jsDelivr
+jsdelivr/*.log
+jsdelivr/**/*.log
+
+# unpkg
+unpkg/*.log
+unpkg/**/*.log
+
+# cdnjs
+cdnjs/*.log
+cdnjs/**/*.log
+
+# Google Fonts
+google-fonts/*.log
+google-fonts/**/*.log
+
+# Adobe Fonts
+adobe-fonts/*.log
+adobe-fonts/**/*.log
+
+# Font Awesome
+font-awesome/*.log
+font-awesome/**/*.log
+
+# Material Icons
+material-icons/*.log
+material-icons/**/*.log
+
+# Feather Icons
+feather-icons/*.log
+feather-icons/**/*.log
+
+# Heroicons
+heroicons/*.log
+heroicons/**/*.log
+
+# Lucide
+lucide/*.log
+lucide/**/*.log
+
+# Remix Icon
+remix-icon/*.log
+remix-icon/**/*.log
+
+# Tabler Icons
+tabler-icons/*.log
+tabler-icons/**/*.log
+
+# Ionicons
+ionicons/*.log
+ionicons/**/*.log
+
+# Ant Design Icons
+ant-design-icons/*.log
+ant-design-icons/**/*.log
+
+# Bootstrap Icons
+bootstrap-icons/*.log
+bootstrap-icons/**/*.log
+
+# Tailwind CSS
+tailwindcss/*.log
+tailwindcss/**/*.log
+
+# Tailwind UI
+tailwindui/*.log
+tailwindui/**/*.log
+
+# Headless UI
+headlessui/*.log
+headlessui/**/*.log
+
+# Heroicons
+heroicons/*.log
+heroicons/**/*.log
+
+# Typography
+typography/*.log
+typography/**/*.log
+
+# Forms
+forms/*.log
+forms/**/*.log
+
+# Aspect Ratio
+aspect-ratio/*.log
+aspect-ratio/**/*.log
+
+# Container Queries
+container-queries/*.log
+container-queries/**/*.log

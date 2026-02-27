@@ -1,0 +1,193 @@
+// Bandhan AI - DPDP Act 2023 Compliant Authentication Schema
+// IMPORTANT: NO Aadhaar numbers are stored. Only verification tokens and status flags.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// USER MODEL - 3-Tier Verification (NO Aadhaar Storage)
+// ============================================================================
+
+model User {
+  id                    String    @id @default(uuid())
+
+  // Contact Information
+  phone                 String?   @unique // Indian format: +91XXXXXXXXXX
+  email                 String?   @unique
+  name                  String?
+
+  // Authentication (Firebase UID reference, no passwords stored locally)
+  firebaseUid           String?   @unique
+
+  // Tier 1: Phone OTP Verification (Firebase Auth)
+  isPhoneVerified       Boolean   @default(false)
+  phoneVerifiedAt       DateTime?
+
+  // Tier 2: DigiLocker OAuth (MeitY API) - Encrypted token only
+  digiLockerToken       String?   // AES-256-GCM encrypted via AWS KMS
+  digiLockerTokenIv     String?   // Initialization vector for decryption
+  digiLockerTokenTag    String?   // Auth tag for GCM
+  digiLockerVerifiedAt  DateTime?
+
+  // Tier 3: Video Selfie Verification
+  verificationLevel     Int       @default(0) // 0: None, 1: Phone, 2: DigiLocker, 3: Video Selfie
+  videoSelfieData       String?   // Encrypted liveness detection result
+  videoSelfieVerifiedAt DateTime?
+
+  // Age Verification (DPDP Act 2023 - 18+ requirement)
+  dateOfBirth           DateTime?
+  isAgeVerified         Boolean   @default(false)
+  ageVerifiedAt         DateTime?
+
+  // Account Status
+  isActive              Boolean   @default(true)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  lastLoginAt           DateTime?
+
+  // Relations
+  consents              Consent[]
+  locationHistory       LocationHistory[]
+  sessions              Session[]
+
+  @@index([phone])
+  @@index([email])
+  @@index([firebaseUid])
+  @@index([verificationLevel])
+}
+
+// ============================================================================
+// CONSENT MODEL - DPDP Act 2023 Compliance
+// Purpose-based toggles with granular control
+// ============================================================================
+
+model Consent {
+  id                    String    @id @default(uuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: CASCADE)
+
+  // Consent Purpose (DPDP Act 2023 - Specific purposes only)
+  purposeMatching       Boolean   @default(false) // For identity matching
+  purposeMarketing      Boolean   @default(false) // For marketing communications
+  purposeAnalytics      Boolean   @default(false) // For usage analytics
+  purposeThirdParty     Boolean   @default(false) // For third-party sharing
+
+  // Consent Metadata
+  consentGivenAt        DateTime  @default(now())
+  consentWithdrawnAt    DateTime?
+  consentVersion        String    @default("1.0") // Track consent policy version
+  ipAddress             String?
+  userAgent             String?
+
+  // Audit Trail
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([purposeMatching])
+  @@index([purposeMarketing])
+}
+
+// ============================================================================
+// LOCATION HISTORY - Auto-delete after 90 days (DPDP Act 2023)
+// ============================================================================
+
+model LocationHistory {
+  id                    String    @id @default(uuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: CASCADE)
+
+  latitude              Decimal   @db.Decimal(10, 8)
+  longitude             Decimal   @db.Decimal(11, 8)
+  accuracy              Float?
+
+  // Auto-delete tracking
+  expiresAt             DateTime  // Set to createdAt + 90 days
+  isExpired             Boolean   @default(false)
+
+  createdAt             DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([isExpired])
+}
+
+// ============================================================================
+// SESSION MODEL - JWT Refresh Token Management
+// ============================================================================
+
+model Session {
+  id                    String    @id @default(uuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: CASCADE)
+
+  refreshTokenHash      String    // Hashed refresh token
+  deviceInfo            String?
+  ipAddress             String?
+
+  expiresAt             DateTime
+  revokedAt             DateTime?
+  isRevoked             Boolean   @default(false)
+
+  createdAt             DateTime  @default(now())
+
+  @@index([userId])
+  @@index([refreshTokenHash])
+  @@index([expiresAt])
+}
+
+// ============================================================================
+// OTP MODEL - Phone OTP Tracking (Firebase Integration)
+// ============================================================================
+
+model OtpRequest {
+  id                    String    @id @default(uuid())
+  phone                 String    // Indian format: +91XXXXXXXXXX
+
+  // OTP is handled by Firebase, we only track requests
+  firebaseOtpId         String?   // Firebase OTP session ID
+  attemptCount          Int       @default(0)
+  maxAttempts           Int       @default(5)
+
+  expiresAt             DateTime  // OTP expiration (typically 5 minutes)
+  isUsed                Boolean   @default(false)
+  isExpired             Boolean   @default(false)
+
+  createdAt             DateTime  @default(now())
+
+  @@index([phone])
+  @@index([expiresAt])
+  @@index([isUsed])
+}
+
+// ============================================================================
+// AUDIT LOG - DPDP Act 2023 Compliance Logging
+// ============================================================================
+
+model AuditLog {
+  id                    String    @id @default(uuid())
+
+  // Event Details
+  eventType             String    // LOGIN, CONSENT_GIVEN, DATA_ACCESS, etc.
+  userId                String?
+  entityType            String?   // USER, CONSENT, LOCATION, etc.
+  entityId              String?
+
+  // Event Data (encrypted if sensitive)
+  action                String
+  metadata              Json?
+  ipAddress             String?
+  userAgent             String?
+
+  createdAt             DateTime  @default(now())
+
+  @@index([eventType])
+  @@index([userId])
+  @@index([createdAt])
+}
