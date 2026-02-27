@@ -10,10 +10,10 @@
  * - Bilingual support (English/Hindi)
  */
 
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Crown,
   Info,
@@ -22,11 +22,11 @@ import {
   Zap,
   Lock,
   Sparkles,
-} from 'lucide-react';
-import { useDailyLimit, DailyLimitConfig } from '@/hooks/useDailyLimit';
-import { PremiumUpsellModal } from './PremiumUpsellModal';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+} from "lucide-react";
+import { useDailyLimit, DailyLimitConfig } from "@/hooks/useDailyLimit";
+import { PremiumUpsellModal } from "./PremiumUpsellModal";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 function cn(...classes: (string | undefined | null | false)[]) {
   return twMerge(clsx(classes));
@@ -37,7 +37,7 @@ function cn(...classes: (string | undefined | null | false)[]) {
 // ─────────────────────────────────────────────────────────────────────────────
 interface LimitCounterProps {
   config?: Partial<DailyLimitConfig>;
-  variant?: 'compact' | 'default' | 'expanded';
+  variant?: "compact" | "default" | "expanded";
   showTooltip?: boolean;
   onLimitReached?: () => void;
   className?: string;
@@ -48,34 +48,34 @@ interface LimitCounterProps {
 // ─────────────────────────────────────────────────────────────────────────────
 const TRANSLATIONS = {
   en: {
-    profilesRemaining: 'profiles remaining today',
-    profileRemaining: 'profile remaining today',
-    chatsRemaining: 'chats remaining today',
-    chatRemaining: 'chat remaining today',
-    likesRemaining: 'likes remaining today',
-    likeRemaining: 'like remaining today',
-    resetsIn: 'Resets in',
-    unlimited: 'Unlimited with Premium',
-    upgradeTooltip: 'Upgrade to Premium for unlimited profiles',
-    limitReached: 'Daily limit reached!',
-    comeBackTomorrow: 'Come back tomorrow at 12:00 AM IST',
-    orUpgrade: 'Or upgrade for unlimited access',
-    peakHours: 'Peak hours - SMS may be delayed',
+    profilesRemaining: "profiles remaining today",
+    profileRemaining: "profile remaining today",
+    chatsRemaining: "chats remaining today",
+    chatRemaining: "chat remaining today",
+    likesRemaining: "likes remaining today",
+    likeRemaining: "like remaining today",
+    resetsIn: "Resets in",
+    unlimited: "Unlimited with Premium",
+    upgradeTooltip: "Upgrade to Premium for unlimited profiles",
+    limitReached: "Daily limit reached!",
+    comeBackTomorrow: "Come back tomorrow at 12:00 AM IST",
+    orUpgrade: "Or upgrade for unlimited access",
+    peakHours: "Peak hours - SMS may be delayed",
   },
   hi: {
-    profilesRemaining: 'प्रोफ़ाइल आज शेष',
-    profileRemaining: 'प्रोफ़ाइल आज शेष',
-    chatsRemaining: 'चैट आज शेष',
-    chatRemaining: 'चैट आज शेष',
-    likesRemaining: 'लाइक आज शेष',
-    likeRemaining: 'लाइक आज शेष',
-    resetsIn: 'में रीसेट होगा',
-    unlimited: 'प्रीमियम के साथ असीमित',
-    upgradeTooltip: 'असीमित प्रोफ़ाइल के लिए प्रीमियम में अपग्रेड करें',
-    limitReached: 'दैनिक सीमा पहुंच गई!',
-    comeBackTomorrow: 'कल सुबह 12:00 बजे IST पर वापस आएं',
-    orUpgrade: 'या असीमित एक्सेस के लिए अपग्रेड करें',
-    peakHours: 'पीक आवर्स - एसएमएस में देरी हो सकती है',
+    profilesRemaining: "प्रोफ़ाइल आज शेष",
+    profileRemaining: "प्रोफ़ाइल आज शेष",
+    chatsRemaining: "चैट आज शेष",
+    chatRemaining: "चैट आज शेष",
+    likesRemaining: "लाइक आज शेष",
+    likeRemaining: "लाइक आज शेष",
+    resetsIn: "में रीसेट होगा",
+    unlimited: "प्रीमियम के साथ असीमित",
+    upgradeTooltip: "असीमित प्रोफ़ाइल के लिए प्रीमियम में अपग्रेड करें",
+    limitReached: "दैनिक सीमा पहुंच गई!",
+    comeBackTomorrow: "कल सुबह 12:00 बजे IST पर वापस आएं",
+    orUpgrade: "या असीमित एक्सेस के लिए अपग्रेड करें",
+    peakHours: "पीक आवर्स - एसएमएस में देरी हो सकती है",
   },
 };
 
@@ -87,27 +87,35 @@ function ProgressBar({
   colorState,
 }: {
   percentage: number;
-  colorState: 'green' | 'orange' | 'red';
+  colorState: "green" | "orange" | "red";
 }) {
   const colorClasses = {
-    green: 'from-emerald-500 to-teal-500',
-    orange: 'from-amber-500 to-orange-500',
-    red: 'from-rose-500 to-red-500',
+    green: "from-emerald-500 to-teal-500",
+    orange: "from-amber-500 to-orange-500",
+    red: "from-rose-500 to-red-500",
   };
 
   const bgColors = {
-    green: 'bg-emerald-500/20',
-    orange: 'bg-amber-500/20',
-    red: 'bg-rose-500/20',
+    green: "bg-emerald-500/20",
+    orange: "bg-amber-500/20",
+    red: "bg-rose-500/20",
   };
 
   return (
-    <div className={cn('w-full h-2 rounded-full overflow-hidden', bgColors[colorState])}>
+    <div
+      className={cn(
+        "w-full h-2 rounded-full overflow-hidden",
+        bgColors[colorState],
+      )}
+    >
       <motion.div
         initial={{ width: 0 }}
         animate={{ width: `${percentage}%` }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        className={cn('h-full rounded-full bg-gradient-to-r', colorClasses[colorState])}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className={cn(
+          "h-full rounded-full bg-gradient-to-r",
+          colorClasses[colorState],
+        )}
       />
     </div>
   );
@@ -145,20 +153,20 @@ function LimitTooltip({
 // ─────────────────────────────────────────────────────────────────────────────
 export function LimitCounter({
   config = {},
-  variant = 'default',
+  variant = "default",
   showTooltip = true,
   onLimitReached,
   className,
 }: LimitCounterProps) {
   const [showUpsellModal, setShowUpsellModal] = useState(false);
   const [showTooltipState, setShowTooltipState] = useState(false);
-  const [language, setLanguage] = useState<'en' | 'hi'>('en');
+  const [language, setLanguage] = useState<"en" | "hi">("en");
 
   // Default config for profiles
   const fullConfig: DailyLimitConfig = {
     dailyLimit: config.dailyLimit || 5,
-    storageKey: config.storageKey || 'bandhan_daily_profiles',
-    actionType: config.actionType || 'profiles',
+    storageKey: config.storageKey || "bandhan_daily_profiles",
+    actionType: config.actionType || "profiles",
   };
 
   const {
@@ -179,13 +187,13 @@ export function LimitCounter({
   const getLabel = () => {
     const actionType = fullConfig.actionType;
 
-    if (actionType === 'profiles') {
+    if (actionType === "profiles") {
       return remaining === 1 ? t.profileRemaining : t.profilesRemaining;
     }
-    if (actionType === 'chats') {
+    if (actionType === "chats") {
       return remaining === 1 ? t.chatRemaining : t.chatsRemaining;
     }
-    if (actionType === 'likes') {
+    if (actionType === "likes") {
       return remaining === 1 ? t.likeRemaining : t.likesRemaining;
     }
     return t.profilesRemaining;
@@ -204,18 +212,18 @@ export function LimitCounter({
 
   // Variant styles
   const variantStyles = {
-    compact: 'h-8',
-    default: 'h-12',
-    expanded: 'h-auto p-4',
+    compact: "h-8",
+    default: "h-12",
+    expanded: "h-auto p-4",
   };
 
   return (
     <>
       <div
         className={cn(
-          'relative inline-flex items-center space-x-3',
+          "relative inline-flex items-center space-x-3",
           variantStyles[variant],
-          className
+          className,
         )}
         onMouseEnter={() => showTooltip && setShowTooltipState(true)}
         onMouseLeave={() => setShowTooltipState(false)}
@@ -258,10 +266,10 @@ export function LimitCounter({
               initial={{ scale: 1.2 }}
               animate={{ scale: 1 }}
               className={cn(
-                'text-lg font-bold',
-                colorState === 'green' && 'text-emerald-400',
-                colorState === 'orange' && 'text-amber-400',
-                colorState === 'red' && 'text-rose-400'
+                "text-lg font-bold",
+                colorState === "green" && "text-emerald-400",
+                colorState === "orange" && "text-amber-400",
+                colorState === "red" && "text-rose-400",
               )}
             >
               {remaining}
@@ -277,7 +285,7 @@ export function LimitCounter({
         </div>
 
         {/* Progress Bar (default and expanded variants) */}
-        {variant !== 'compact' && (
+        {variant !== "compact" && (
           <div className="w-24 sm:w-32">
             <ProgressBar percentage={percentageUsed} colorState={colorState} />
           </div>
@@ -286,7 +294,9 @@ export function LimitCounter({
         {/* Reset Timer */}
         <div className="flex items-center space-x-1 text-xs text-gray-500">
           <Clock className="w-3 h-3" />
-          <span>{t.resetsIn} {timeUntilReset}</span>
+          <span>
+            {t.resetsIn} {timeUntilReset}
+          </span>
         </div>
 
         {/* Peak Hours Indicator */}
@@ -331,7 +341,7 @@ export function LimitCounter({
         isOpen={showUpsellModal}
         onClose={() => setShowUpsellModal(false)}
         triggerSource="limit_reached"
-        limitType={fullConfig.actionType}
+        limitType={fullConfig.actionType as "profiles" | "chats" | "likes"}
       />
     </>
   );
@@ -343,8 +353,14 @@ export function LimitCounter({
 export function LimitCounterCompact({
   config,
   className,
-}: Omit<LimitCounterProps, 'variant'>) {
-  return <LimitCounter {...{ config, className }} variant="compact" showTooltip={false} />;
+}: Omit<LimitCounterProps, "variant">) {
+  return (
+    <LimitCounter
+      {...{ config, className }}
+      variant="compact"
+      showTooltip={false}
+    />
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -354,14 +370,14 @@ export function LimitCounterExpanded({
   config,
   onUpgrade,
   className,
-}: Omit<LimitCounterProps, 'variant'> & { onUpgrade?: () => void }) {
+}: Omit<LimitCounterProps, "variant"> & { onUpgrade?: () => void }) {
   const [showUpsellModal, setShowUpsellModal] = useState(false);
-  const [language, setLanguage] = useState<'en' | 'hi'>('en');
+  const [language, setLanguage] = useState<"en" | "hi">("en");
 
   const fullConfig: DailyLimitConfig = {
     dailyLimit: config?.dailyLimit || 5,
-    storageKey: config?.storageKey || 'bandhan_daily_profiles',
-    actionType: config?.actionType || 'profiles',
+    storageKey: config?.storageKey || "bandhan_daily_profiles",
+    actionType: config?.actionType || "profiles",
   };
 
   const {
@@ -377,13 +393,18 @@ export function LimitCounterExpanded({
 
   return (
     <>
-      <div className={cn('w-full p-4 rounded-2xl glass-md border border-white/10', className)}>
+      <div
+        className={cn(
+          "w-full p-4 rounded-2xl glass-md border border-white/10",
+          className,
+        )}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <Crown className="w-5 h-5 text-gold-400" />
             <h3 className="text-sm font-semibold text-white">
-              {language === 'en' ? 'Daily Limit' : 'दैनिक सीमा'}
+              {language === "en" ? "Daily Limit" : "दैनिक सीमा"}
             </h3>
           </div>
           {isLimitReached && (
@@ -401,12 +422,14 @@ export function LimitCounterExpanded({
         {/* Stats */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-baseline space-x-2">
-            <span className={cn(
-              'text-xl font-bold',
-              colorState === 'green' && 'text-emerald-400',
-              colorState === 'orange' && 'text-amber-400',
-              colorState === 'red' && 'text-rose-400'
-            )}>
+            <span
+              className={cn(
+                "text-xl font-bold",
+                colorState === "green" && "text-emerald-400",
+                colorState === "orange" && "text-amber-400",
+                colorState === "red" && "text-rose-400",
+              )}
+            >
               {remaining}
             </span>
             <span className="text-gray-400">/ {limit}</span>
@@ -414,7 +437,9 @@ export function LimitCounterExpanded({
           </div>
           <div className="flex items-center space-x-1 text-gray-500">
             <Clock className="w-4 h-4" />
-            <span>{t.resetsIn} {timeUntilReset}</span>
+            <span>
+              {t.resetsIn} {timeUntilReset}
+            </span>
           </div>
         </div>
 
@@ -430,13 +455,13 @@ export function LimitCounterExpanded({
                 onClick={() => setShowUpsellModal(true)}
                 className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-saffron-500 to-rose-500 text-white text-sm font-semibold hover:shadow-saffron-glow transition-shadow"
               >
-                {language === 'en' ? 'Unlock Premium' : 'प्रीमियम अनलॉक करें'}
+                {language === "en" ? "Unlock Premium" : "प्रीमियम अनलॉक करें"}
               </button>
               <button
                 onClick={onUpgrade}
                 className="px-4 py-2.5 rounded-xl glass-sm border border-white/10 text-gray-300 text-sm hover:bg-white/5 transition-colors"
               >
-                {language === 'en' ? 'Remind Tomorrow' : 'कल याद दिलाएं'}
+                {language === "en" ? "Remind Tomorrow" : "कल याद दिलाएं"}
               </button>
             </div>
             <p className="mt-2 text-xs text-gray-500 text-center">
