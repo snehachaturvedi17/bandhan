@@ -14,11 +14,11 @@
  * - Screen reader accessible
  */
 
-'use client';
+"use client";
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useForm, useFieldArray } from "react-hook-form";
 import {
   Shield,
   ShieldAlert,
@@ -36,11 +36,15 @@ import {
   Timer,
   RefreshCw,
   AlertCircle,
-} from 'lucide-react';
-import { detectCarrier, getCarrierSmsTip, TRAI_DISCLAIMER } from '@/lib/carrier-detection';
-import { useCountdownTimer } from '@/hooks/useCountdownTimer';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+} from "lucide-react";
+import {
+  detectCarrier,
+  getCarrierSmsTip,
+  TRAI_DISCLAIMER,
+} from "@/lib/carrier-detection";
+import { useCountdownTimer } from "@/hooks/useCountdownTimer";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -53,7 +57,7 @@ interface OTPInputProps {
   /** Callback when resend is requested */
   onResend: () => Promise<void>;
   /** Initial language preference */
-  language?: 'en' | 'hi';
+  language?: "en" | "hi";
   /** OTP length (default 6 for India) */
   otpLength?: number;
   /** Resend timer duration in seconds */
@@ -73,36 +77,36 @@ interface OTPFormData {
 // ─────────────────────────────────────────────────────────────────────────────
 const ERROR_MESSAGES = {
   invalidOTP: {
-    en: 'Invalid OTP. Please check and try again.',
-    hi: 'अमान्य OTP। कृपया जांचें और पुनः प्रयास करें।',
+    en: "Invalid OTP. Please check and try again.",
+    hi: "अमान्य OTP। कृपया जांचें और पुनः प्रयास करें।",
   },
   otpExpired: {
-    en: 'OTP has expired. Please request a new one.',
-    hi: 'OTP समाप्त हो गया है। कृपया नया अनुरोध करें।',
+    en: "OTP has expired. Please request a new one.",
+    hi: "OTP समाप्त हो गया है। कृपया नया अनुरोध करें।",
   },
   networkError: {
-    en: 'Network error. Please check your connection and try again.',
-    hi: 'नेटवर्क त्रुटि। कृपया अपना कनेक्शन जांचें और पुनः प्रयास करें।',
+    en: "Network error. Please check your connection and try again.",
+    hi: "नेटवर्क त्रुटि। कृपया अपना कनेक्शन जांचें और पुनः प्रयास करें।",
   },
   tooManyAttempts: {
-    en: 'Too many failed attempts. Please request a new OTP.',
-    hi: 'बहुत सारे विफल प्रयास। कृपया नया OTP अनुरोध करें।',
+    en: "Too many failed attempts. Please request a new OTP.",
+    hi: "बहुत सारे विफल प्रयास। कृपया नया OTP अनुरोध करें।",
   },
   otpNotReceived: {
-    en: 'OTP not received? Try these troubleshooting steps:',
-    hi: 'OTP नहीं मिला? ये ट्रबलशूटिंग चरण आज़माएं:',
+    en: "OTP not received? Try these troubleshooting steps:",
+    hi: "OTP नहीं मिला? ये ट्रबलशूटिंग चरण आज़माएं:",
   },
   phishingWarning: {
-    en: '⚠️ Bandhan NEVER asks for your OTP. Never share with anyone.',
-    hi: '⚠️ बंधन कभी भी आपका OTP नहीं पूछता। किसी के साथ साझा न करें।',
+    en: "⚠️ Bandhan NEVER asks for your OTP. Never share with anyone.",
+    hi: "⚠️ बंधन कभी भी आपका OTP नहीं पूछता। किसी के साथ साझा न करें।",
   },
   retryAttemptsRemaining: {
     en: (attempts: number) => `${attempts} attempts remaining`,
     hi: (attempts: number) => `${attempts} प्रयास शेष`,
   },
   lastAttempt: {
-    en: '⚠️ Last attempt remaining',
-    hi: '⚠️ अंतिम प्रयास शेष',
+    en: "⚠️ Last attempt remaining",
+    hi: "⚠️ अंतिम प्रयास शेष",
   },
 };
 
@@ -113,7 +117,7 @@ export function OTPInput({
   phoneNumber,
   onVerify,
   onResend,
-  language = 'en',
+  language = "en",
   otpLength = 6,
   resendTimer = 30,
   maxRetries = 3,
@@ -126,7 +130,7 @@ export function OTPInput({
   const [retryCount, setRetryCount] = useState(0);
   const [showResendTips, setShowResendTips] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [languageState, setLanguageState] = useState<'en' | 'hi'>(language);
+  const [languageState, setLanguageState] = useState<"en" | "hi">(language);
 
   // Refs
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -141,7 +145,7 @@ export function OTPInput({
   const {
     remaining,
     isActive,
-    isComplete,
+    isTimerComplete,
     formatted,
     reset: resetTimer,
   } = useCountdownTimer({
@@ -163,13 +167,13 @@ export function OTPInput({
     formState: { errors },
   } = useForm<OTPFormData>({
     defaultValues: {
-      digits: Array.from({ length: otpLength }, () => ({ value: '' })),
+      digits: Array.from({ length: otpLength }, () => ({ value: "" })),
     },
-    mode: 'onChange',
+    mode: "onChange",
   });
 
-  const digits = watch('digits');
-  const isComplete = digits.every((d) => d.value !== '');
+  const digits = watch("digits");
+  const isComplete = digits.every((d) => d.value !== "");
 
   // ───────────────────────────────────────────────────────────────────────────
   // Handlers
@@ -181,7 +185,7 @@ export function OTPInput({
   const handleDigitChange = useCallback(
     (index: number, value: string) => {
       // Only allow single digit
-      const digit = value.replace(/\D/g, '').slice(-1);
+      const digit = value.replace(/\D/g, "").slice(-1);
 
       setValue(`digits.${index}.value`, digit);
       setError(null);
@@ -196,12 +200,14 @@ export function OTPInput({
       if (digit && index === otpLength - 1) {
         // Small delay for better UX
         setTimeout(() => {
-          const otp = digits.map((d, i) => (i === index ? digit : d.value)).join('');
+          const otp = digits
+            .map((d, i) => (i === index ? digit : d.value))
+            .join("");
           handleSubmitOTP(otp);
         }, 150);
       }
     },
-    [digits, otpLength]
+    [digits, otpLength],
   );
 
   /**
@@ -209,16 +215,16 @@ export function OTPInput({
    */
   const handleKeyDown = useCallback(
     (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Backspace' && !digits[index].value && index > 0) {
+      if (e.key === "Backspace" && !digits[index].value && index > 0) {
         inputRefs.current[index - 1]?.focus();
       }
 
       // Handle paste
-      if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+      if (e.key === "v" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         navigator.clipboard.readText().then((pasted) => {
-          const otpDigits = pasted.replace(/\D/g, '').slice(0, otpLength);
-          otpDigits.split('').forEach((digit, i) => {
+          const otpDigits = pasted.replace(/\D/g, "").slice(0, otpLength);
+          otpDigits.split("").forEach((digit, i) => {
             if (i < otpLength) {
               setValue(`digits.${i}.value`, digit);
             }
@@ -229,14 +235,14 @@ export function OTPInput({
         });
       }
     },
-    [digits, otpLength]
+    [digits, otpLength],
   );
 
   /**
    * Handle OTP verification
    */
   const handleSubmitOTP = async (otp?: string) => {
-    const otpValue = otp || digits.map((d) => d.value).join('');
+    const otpValue = otp || digits.map((d) => d.value).join("");
 
     if (otpValue.length !== otpLength) {
       setError(ERROR_MESSAGES.invalidOTP.en);
@@ -253,7 +259,11 @@ export function OTPInput({
       setIsVerified(true);
       resetTimer();
     } catch (err: unknown) {
-      const errorMessage = err as { userMessage?: string; userMessageHi?: string; message?: string };
+      const errorMessage = err as {
+        userMessage?: string;
+        userMessageHi?: string;
+        message?: string;
+      };
 
       // Increment retry count
       const newRetryCount = retryCount + 1;
@@ -270,14 +280,18 @@ export function OTPInput({
         // Show error with retry count
         const remaining = maxRetries - newRetryCount;
         if (remaining === 1) {
-          setError(`${ERROR_MESSAGES.invalidOTP.en} ${ERROR_MESSAGES.lastAttempt.en}`);
-          setErrorHi(`${ERROR_MESSAGES.invalidOTP.hi} ${ERROR_MESSAGES.lastAttempt.hi}`);
-        } else {
           setError(
-            `${ERROR_MESSAGES.invalidOTP.en} (${ERROR_MESSAGES.retryAttemptsRemaining(remaining)})`
+            `${ERROR_MESSAGES.invalidOTP.en} ${ERROR_MESSAGES.lastAttempt.en}`,
           );
           setErrorHi(
-            `${ERROR_MESSAGES.invalidOTP.hi} (${ERROR_MESSAGES.retryAttemptsRemaining(remaining)})`
+            `${ERROR_MESSAGES.invalidOTP.hi} ${ERROR_MESSAGES.lastAttempt.hi}`,
+          );
+        } else {
+          setError(
+            `${ERROR_MESSAGES.invalidOTP.en} (${ERROR_MESSAGES.retryAttemptsRemaining(remaining)})`,
+          );
+          setErrorHi(
+            `${ERROR_MESSAGES.invalidOTP.hi} (${ERROR_MESSAGES.retryAttemptsRemaining(remaining)})`,
           );
         }
         // Reset form for retry
@@ -293,7 +307,7 @@ export function OTPInput({
    * Handle resend OTP
    */
   const handleResend = async () => {
-    if (!isComplete || isActive) return;
+    if (!isComplete || isTimerComplete) return;
 
     setIsLoading(true);
     setError(null);
@@ -307,7 +321,11 @@ export function OTPInput({
       inputRefs.current[0]?.focus();
       setShowResendTips(false);
     } catch (err: unknown) {
-      const errorMessage = err as { userMessage?: string; userMessageHi?: string; message?: string };
+      const errorMessage = err as {
+        userMessage?: string;
+        userMessageHi?: string;
+        message?: string;
+      };
       setError(errorMessage.userMessage || ERROR_MESSAGES.networkError.en);
       setErrorHi(errorMessage.userMessageHi || ERROR_MESSAGES.networkError.hi);
     } finally {
@@ -319,7 +337,7 @@ export function OTPInput({
    * Toggle language
    */
   const toggleLanguage = () => {
-    setLanguageState((prev) => (prev === 'en' ? 'hi' : 'en'));
+    setLanguageState((prev) => (prev === "en" ? "hi" : "en"));
   };
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -334,16 +352,16 @@ export function OTPInput({
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ type: 'spring', delay: 0.2 }}
+            transition={{ type: "spring", delay: 0.2 }}
           >
             <Shield className="w-8 h-8 text-saffron-500" />
           </motion.div>
         </div>
         <h2 className="text-xl font-bold text-white mb-1">
-          {languageState === 'en' ? 'Verify OTP' : 'OTP सत्यापित करें'}
+          {languageState === "en" ? "Verify OTP" : "OTP सत्यापित करें"}
         </h2>
         <p className="text-sm text-gray-400">
-          {languageState === 'en'
+          {languageState === "en"
             ? `Enter the 6-digit code sent to ${phoneNumber}`
             : `6-अंकीय कोड दर्ज करें जो ${phoneNumber} पर भेजा गया है`}
         </p>
@@ -377,20 +395,20 @@ export function OTPInput({
               onKeyDown={(e) => handleKeyDown(index, e)}
               disabled={isLoading || isVerified}
               aria-label={
-                languageState === 'en'
+                languageState === "en"
                   ? `Digit ${index + 1} of ${otpLength}`
                   : `${otpLength} में से अंक ${index + 1}`
               }
               className={clsx(
-                'w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold rounded-xl',
-                'bg-white/5 border-2 transition-all duration-200',
-                'text-white placeholder-gray-600',
-                'focus:outline-none focus:border-saffron-500 focus:bg-white/10',
+                "w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold rounded-xl",
+                "bg-white/5 border-2 transition-all duration-200",
+                "text-white placeholder-gray-600",
+                "focus:outline-none focus:border-saffron-500 focus:bg-white/10",
                 errors.digits?.[index]
-                  ? 'border-red-500/50 focus:border-red-500'
-                  : 'border-white/10 hover:border-white/20',
-                isLoading && 'opacity-50 cursor-not-allowed',
-                isVerified && 'border-emerald-500/50 bg-emerald-500/10'
+                  ? "border-red-500/50 focus:border-red-500"
+                  : "border-white/10 hover:border-white/20",
+                isLoading && "opacity-50 cursor-not-allowed",
+                isVerified && "border-emerald-500/50 bg-emerald-500/10",
               )}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -404,19 +422,21 @@ export function OTPInput({
           {isLoading && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               className="flex justify-center mb-6"
             >
               <div className="flex items-center space-x-2 text-saffron-400">
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                 >
                   <RefreshCw className="w-5 h-5" />
                 </motion.div>
                 <span className="text-sm">
-                  {languageState === 'en' ? 'Verifying...' : 'सत्यापित हो रहा है...'}
+                  {languageState === "en"
+                    ? "Verifying..."
+                    : "सत्यापित हो रहा है..."}
                 </span>
               </div>
             </motion.div>
@@ -435,7 +455,9 @@ export function OTPInput({
               <div className="flex items-center space-x-2 text-emerald-400">
                 <CheckCircle2 className="w-6 h-6" />
                 <span className="text-sm font-medium">
-                  {languageState === 'en' ? 'Verified successfully!' : 'सफलतापूर्वक सत्यापित!'}
+                  {languageState === "en"
+                    ? "Verified successfully!"
+                    : "सफलतापूर्वक सत्यापित!"}
                 </span>
               </div>
             </motion.div>
@@ -455,7 +477,7 @@ export function OTPInput({
                 <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <p className="text-sm text-red-300">{error}</p>
-                  {errorHi && languageState === 'hi' && (
+                  {errorHi && languageState === "hi" && (
                     <p className="text-xs text-red-400 mt-1">{errorHi}</p>
                   )}
                 </div>
@@ -468,38 +490,44 @@ export function OTPInput({
         <motion.button
           type="submit"
           disabled={!isComplete || isLoading || isVerified}
-          whileHover={{ scale: !isComplete || isLoading || isVerified ? 1 : 1.02 }}
-          whileTap={{ scale: !isComplete || isLoading || isVerified ? 1 : 0.98 }}
+          whileHover={{
+            scale: !isComplete || isLoading || isVerified ? 1 : 1.02,
+          }}
+          whileTap={{
+            scale: !isComplete || isLoading || isVerified ? 1 : 0.98,
+          }}
           className={clsx(
-            'w-full py-3.5 rounded-xl font-semibold text-white mb-4',
-            'transition-all duration-300',
+            "w-full py-3.5 rounded-xl font-semibold text-white mb-4",
+            "transition-all duration-300",
             isComplete && !isLoading && !isVerified
-              ? 'bg-gradient-to-r from-saffron-500 to-rose-500 hover:shadow-saffron-glow'
-              : 'bg-gray-700/50 cursor-not-allowed opacity-50'
+              ? "bg-gradient-to-r from-saffron-500 to-rose-500 hover:shadow-saffron-glow"
+              : "bg-gray-700/50 cursor-not-allowed opacity-50",
           )}
         >
           {isLoading
-            ? languageState === 'en'
-              ? 'Verifying...'
-              : 'सत्यापित हो रहा है...'
+            ? languageState === "en"
+              ? "Verifying..."
+              : "सत्यापित हो रहा है..."
             : isVerified
-            ? languageState === 'en'
-              ? 'Verified!'
-              : 'सत्यापित!'
-            : languageState === 'en'
-            ? 'Verify OTP'
-            : 'OTP सत्यापित करें'}
+              ? languageState === "en"
+                ? "Verified!"
+                : "सत्यापित!"
+              : languageState === "en"
+                ? "Verify OTP"
+                : "OTP सत्यापित करें"}
         </motion.button>
       </form>
 
       {/* Resend Section */}
       <div className="text-center mb-6">
         <p className="text-sm text-gray-400 mb-2">
-          {languageState === 'en' ? "Didn't receive the code?" : 'कोड नहीं मिला?'}
-          {' '}
+          {languageState === "en"
+            ? "Didn't receive the code?"
+            : "कोड नहीं मिला?"}{" "}
           {isActive ? (
             <span className="text-gray-500">
-              {languageState === 'en' ? 'Resend in' : 'में पुनः भेजें'} {formatted}
+              {languageState === "en" ? "Resend in" : "में पुनः भेजें"}{" "}
+              {formatted}
             </span>
           ) : (
             <button
@@ -508,7 +536,9 @@ export function OTPInput({
               className="text-saffron-400 hover:text-saffron-300 font-medium inline-flex items-center space-x-1 transition-colors disabled:opacity-50"
             >
               <RotateCcw className="w-4 h-4" />
-              <span>{languageState === 'en' ? 'Resend OTP' : 'OTP पुनः भेजें'}</span>
+              <span>
+                {languageState === "en" ? "Resend OTP" : "OTP पुनः भेजें"}
+              </span>
             </button>
           )}
         </p>
@@ -520,7 +550,9 @@ export function OTPInput({
         >
           <Info className="w-3.5 h-3.5" />
           <span>
-            {languageState === 'en' ? 'Troubleshooting tips' : 'ट्रबलशूटिंग टिप्स'}
+            {languageState === "en"
+              ? "Troubleshooting tips"
+              : "ट्रबलशूटिंग टिप्स"}
           </span>
           {showResendTips ? (
             <motion.span
@@ -540,12 +572,12 @@ export function OTPInput({
           {showResendTips && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               className="mt-3 p-4 rounded-xl bg-white/5 border border-white/10 text-left"
             >
               <p className="text-xs text-gray-300 mb-2">
-                {languageState === 'en'
+                {languageState === "en"
                   ? ERROR_MESSAGES.otpNotReceived.en
                   : ERROR_MESSAGES.otpNotReceived.hi}
               </p>
@@ -592,7 +624,9 @@ export function OTPInput({
         <div className="flex items-start space-x-2">
           <Lock className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-gray-400">{TRAI_DISCLAIMER.en.heading}</p>
+            <p className="font-medium text-gray-400">
+              {TRAI_DISCLAIMER.en.heading}
+            </p>
             <p className="mt-1">{TRAI_DISCLAIMER.en.content}</p>
             <p className="mt-1 text-gray-600">{TRAI_DISCLAIMER.hi.content}</p>
           </div>
@@ -604,7 +638,7 @@ export function OTPInput({
         <div className="inline-flex items-center space-x-1.5 text-xs text-gray-500">
           <Timer className="w-3.5 h-3.5" />
           <span>
-            {languageState === 'en'
+            {languageState === "en"
               ? `OTP expires in ${expiryMinutes} minutes`
               : `OTP ${expiryMinutes} मिनट में समाप्त हो जाता है`}
           </span>
