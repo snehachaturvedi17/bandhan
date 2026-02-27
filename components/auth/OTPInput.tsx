@@ -145,7 +145,7 @@ export function OTPInput({
   const {
     remaining,
     isActive,
-    isTimerComplete,
+    isComplete: isTimerComplete,
     formatted,
     reset: resetTimer,
   } = useCountdownTimer({
