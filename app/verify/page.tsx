@@ -28,6 +28,7 @@ import {
   Info,
   Sparkles,
   Crown,
+  TrendingUp,
   X,
 } from "lucide-react";
 import {
