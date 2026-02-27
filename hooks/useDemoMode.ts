@@ -9,10 +9,10 @@
  * - Demo mode banner visibility
  */
 
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   isDemoMode,
   enableDemoMode,
@@ -21,8 +21,8 @@ import {
   selectDemoUser,
   getDemoUsers,
   type MockUser,
-} from '@/lib/mock-auth';
-import { DEMO_USERS, type DemoUserProfile } from '@/data/demo-users';
+} from "@/lib/mock-auth";
+import { DEMO_USERS, type DemoUserProfile } from "@/data/demo-users";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -59,9 +59,9 @@ export type DemoModeReturn = DemoModeState & DemoModeActions;
 // LocalStorage Keys
 // ─────────────────────────────────────────────────────────────────────────────
 const STORAGE_KEYS = {
-  demoMode: 'bandhan_demo_mode',
-  demoBannerHidden: 'bandhan_demo_banner_hidden',
-  selectedDemoUser: 'bandhan_selected_demo_user',
+  demoMode: "bandhan_demo_mode",
+  demoBannerHidden: "bandhan_demo_banner_hidden",
+  selectedDemoUser: "bandhan_selected_demo_user",
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -78,13 +78,14 @@ export function useDemoMode(): DemoModeReturn {
   // Check for demo mode on mount and when URL changes
   useEffect(() => {
     // Check URL parameter
-    const urlDemo = searchParams.get('demo') === 'true';
+    const urlDemo = searchParams.get("demo") === "true";
 
     // Check localStorage
     const storedDemo = isDemoMode();
 
     // Check if banner was previously hidden
-    const bannerHidden = localStorage.getItem(STORAGE_KEYS.demoBannerHidden) === 'true';
+    const bannerHidden =
+      localStorage.getItem(STORAGE_KEYS.demoBannerHidden) === "true";
 
     // Get stored user
     const storedUser = getMockCurrentUser();
@@ -113,10 +114,10 @@ export function useDemoMode(): DemoModeReturn {
 
     // Add URL parameter
     const url = new URL(window.location.href);
-    url.searchParams.set('demo', 'true');
+    url.searchParams.set("demo", "true");
     router.replace(url.toString());
 
-    console.log('🎭 Demo mode enabled');
+    console.log("🎭 Demo mode enabled");
   }, [router]);
 
   // Disable demo mode
@@ -127,10 +128,10 @@ export function useDemoMode(): DemoModeReturn {
 
     // Remove URL parameter
     const url = new URL(window.location.href);
-    url.searchParams.delete('demo');
+    url.searchParams.delete("demo");
     router.replace(url.toString());
 
-    console.log('🔒 Demo mode disabled');
+    console.log("🔒 Demo mode disabled");
   }, [router]);
 
   // Toggle demo mode
@@ -155,7 +156,7 @@ export function useDemoMode(): DemoModeReturn {
   // Hide banner
   const hideBanner = useCallback(() => {
     setShowBanner(false);
-    localStorage.setItem(STORAGE_KEYS.demoBannerHidden, 'true');
+    localStorage.setItem(STORAGE_KEYS.demoBannerHidden, "true");
   }, []);
 
   // Show banner
@@ -174,7 +175,7 @@ export function useDemoMode(): DemoModeReturn {
     toggle,
     selectUser,
     hideBanner,
-    showBanner: showBannerFunc,
+    showBannerFunc,
   };
 }
 
@@ -187,9 +188,9 @@ export function useDemoMode(): DemoModeReturn {
  */
 export function checkDemoMode(): boolean {
   // Check URL (if in browser)
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('demo') === 'true') {
+    if (urlParams.get("demo") === "true") {
       return true;
     }
   }
@@ -202,7 +203,7 @@ export function checkDemoMode(): boolean {
  * Get demo OTP for display
  */
 export function getDemoOTP(): string {
-  return '123456';
+  return "123456";
 }
 
 /**
@@ -214,9 +215,9 @@ export function getDemoCredentials(): {
   note: string;
 } {
   return {
-    otp: '123456',
-    phone: '+91 98765 43210',
-    note: 'Use any Indian phone number. OTP is always 123456.',
+    otp: "123456",
+    phone: "+91 98765 43210",
+    note: "Use any Indian phone number. OTP is always 123456.",
   };
 }
 
