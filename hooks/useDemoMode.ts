@@ -50,7 +50,7 @@ export interface DemoModeActions {
   /** Hide demo banner */
   hideBanner: () => void;
   /** Show demo banner */
-  showBanner: () => void;
+  showBannerFunc: () => void;
 }
 
 export type DemoModeReturn = DemoModeState & DemoModeActions;
