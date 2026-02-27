@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import {
   Download,
   Share2,
@@ -19,13 +19,13 @@ import {
   Wine,
   QrCode,
   Printer,
-  WhatsApp,
+  MessageCircle,
   FileText,
   Calendar,
   Lock,
-} from 'lucide-react';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+} from "lucide-react";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 function cn(...classes: (string | undefined | null | false)[]) {
   return twMerge(clsx(classes));
@@ -35,30 +35,30 @@ function cn(...classes: (string | undefined | null | false)[]) {
 // Mock Profile Data
 // ─────────────────────────────────────────────────────────────────────────────
 const profileData = {
-  name: 'Rahul Sharma',
+  name: "Rahul Sharma",
   age: 28,
   height: "5'10\"",
-  city: 'Bangalore',
-  state: 'Karnataka',
-  education: 'B.Tech Computer Science, IIT Delhi',
-  career: 'Senior Software Engineer, Google',
-  family: 'Joint family, Middle-class values',
-  fatherOccupation: 'Retired Government Officer',
-  motherOccupation: 'Homemaker',
-  siblings: '1 younger sister (married)',
-  lookingFor: 'Marriage within 1-2 years',
-  valuesAlignment: 'Family-oriented, Traditional yet progressive',
-  lifestyle: 'Vegetarian, Non-smoker, Moderate social life',
-  diet: 'Strict Vegetarian',
-  smoking: 'Non-smoker',
-  drinking: 'Occasionally',
-  motherTongue: 'Hindi',
-  religion: 'Hindu',
-  gotra: 'Bharadwaj',
-  manglik: 'No',
-  location: 'Koramangala, Bangalore',
-  contactEmail: 'rahul.sharma@email.com',
-  contactPhone: '+91 98765 43210',
+  city: "Bangalore",
+  state: "Karnataka",
+  education: "B.Tech Computer Science, IIT Delhi",
+  career: "Senior Software Engineer, Google",
+  family: "Joint family, Middle-class values",
+  fatherOccupation: "Retired Government Officer",
+  motherOccupation: "Homemaker",
+  siblings: "1 younger sister (married)",
+  lookingFor: "Marriage within 1-2 years",
+  valuesAlignment: "Family-oriented, Traditional yet progressive",
+  lifestyle: "Vegetarian, Non-smoker, Moderate social life",
+  diet: "Strict Vegetarian",
+  smoking: "Non-smoker",
+  drinking: "Occasionally",
+  motherTongue: "Hindi",
+  religion: "Hindu",
+  gotra: "Bharadwaj",
+  manglik: "No",
+  location: "Koramangala, Bangalore",
+  contactEmail: "rahul.sharma@email.com",
+  contactPhone: "+91 98765 43210",
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -76,7 +76,12 @@ function DetailRow({
   wide?: boolean;
 }) {
   return (
-    <div className={cn('flex items-start space-x-3 py-2', wide ? 'col-span-2' : '')}>
+    <div
+      className={cn(
+        "flex items-start space-x-3 py-2",
+        wide ? "col-span-2" : "",
+      )}
+    >
       <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
         <Icon className="w-4 h-4 text-violet-400" />
       </div>
@@ -88,11 +93,19 @@ function DetailRow({
   );
 }
 
-function SectionHeading({ children, icon: Icon }: { children: string; icon: React.ComponentType<{ className?: string }> }) {
+function SectionHeading({
+  children,
+  icon: Icon,
+}: {
+  children: string;
+  icon: React.ComponentType<{ className?: string }>;
+}) {
   return (
     <div className="flex items-center space-x-2 mb-3 pb-2 border-b-2 border-violet-200">
       <Icon className="w-5 h-5 text-violet-600" />
-      <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide">{children}</h3>
+      <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide">
+        {children}
+      </h3>
     </div>
   );
 }
@@ -101,10 +114,10 @@ export default function FamilyViewPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
 
-  const generatedDate = new Date().toLocaleDateString('en-IN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  const generatedDate = new Date().toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   const handleDownloadPDF = async () => {
@@ -120,11 +133,11 @@ export default function FamilyViewPage() {
   const handleShareWhatsApp = () => {
     const message = `Hi! I've created my profile on Bandhan AI. Please check: bandhan.ai/profile/rahul-sharma-123`;
     const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   const handleEdit = () => {
-    window.location.href = '/profile';
+    window.location.href = "/profile";
   };
 
   return (
@@ -143,8 +156,12 @@ export default function FamilyViewPage() {
       >
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gradient-brand">Family View</h1>
-            <p className="text-sm text-gray-400">Shareable profile for parents</p>
+            <h1 className="text-2xl font-bold text-gradient-brand">
+              Family View
+            </h1>
+            <p className="text-sm text-gray-400">
+              Shareable profile for parents
+            </p>
           </div>
           <button className="p-2 rounded-xl glass-sm hover:bg-white/10 transition-colors">
             <Lock className="w-5 h-5 text-gray-400" />
@@ -164,7 +181,7 @@ export default function FamilyViewPage() {
               <>
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                 >
                   <FileText className="w-5 h-5" />
                 </motion.div>
@@ -184,7 +201,7 @@ export default function FamilyViewPage() {
             whileTap={{ scale: 0.95 }}
             className="px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold hover:shadow-lg transition-shadow flex items-center space-x-2"
           >
-            <WhatsApp className="w-5 h-5" />
+            <MessageCircle className="w-5 h-5" />
           </motion.button>
 
           <motion.button
@@ -223,7 +240,9 @@ export default function FamilyViewPage() {
                 <Shield className="w-6 h-6 text-violet-600" />
                 <h2 className="text-lg font-bold text-gray-800">Bandhan AI</h2>
               </div>
-              <h1 className="text-xl font-bold text-gray-900 mb-1">Family Introduction Profile</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-1">
+                Family Introduction Profile
+              </h1>
               <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 <span>Verified Profile</span>
@@ -238,8 +257,12 @@ export default function FamilyViewPage() {
                   <Users className="w-16 h-16 text-violet-400" />
                 </div>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">{profileData.name}</h2>
-              <p className="text-gray-600">{profileData.age} years • {profileData.height}</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                {profileData.name}
+              </h2>
+              <p className="text-gray-600">
+                {profileData.age} years • {profileData.height}
+              </p>
             </div>
 
             {/* Basic Details Grid */}
@@ -289,11 +312,7 @@ export default function FamilyViewPage() {
                 label="Religion"
                 value={profileData.religion}
               />
-              <DetailRow
-                icon={Heart}
-                label="Gotra"
-                value={profileData.gotra}
-              />
+              <DetailRow icon={Heart} label="Gotra" value={profileData.gotra} />
               <DetailRow
                 icon={Heart}
                 label="Manglik"
@@ -308,7 +327,9 @@ export default function FamilyViewPage() {
 
             {/* Compatibility Summary */}
             <div className="bg-violet-50 rounded-xl p-4 mb-6 border border-violet-100">
-              <SectionHeading icon={Heart}>Compatibility Summary</SectionHeading>
+              <SectionHeading icon={Heart}>
+                Compatibility Summary
+              </SectionHeading>
               <div className="space-y-3">
                 <DetailRow
                   icon={Heart}
@@ -345,7 +366,9 @@ export default function FamilyViewPage() {
                     <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
                       <Wine className="w-3 h-3 text-amber-600" />
                     </div>
-                    <span className="text-gray-600">{profileData.drinking}</span>
+                    <span className="text-gray-600">
+                      {profileData.drinking}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -353,21 +376,31 @@ export default function FamilyViewPage() {
 
             {/* Parent Message */}
             <div className="bg-saffron-50 rounded-xl p-4 mb-6 border border-saffron-100">
-              <SectionHeading icon={FileText}>A Message from Rahul</SectionHeading>
+              <SectionHeading icon={FileText}>
+                A Message from Rahul
+              </SectionHeading>
               <p className="text-sm text-gray-700 italic leading-relaxed">
-                "Dear Parents, I've created this profile on Bandhan AI to find a compatible life partner.
-                I value family traditions while embracing modern perspectives. I'm looking for someone who
-                shares similar values and is ready to build a meaningful relationship together. Please feel
-                free to share this profile with trusted family friends."
+                "Dear Parents, I've created this profile on Bandhan AI to find a
+                compatible life partner. I value family traditions while
+                embracing modern perspectives. I'm looking for someone who
+                shares similar values and is ready to build a meaningful
+                relationship together. Please feel free to share this profile
+                with trusted family friends."
               </p>
             </div>
 
             {/* Contact & QR Code */}
             <div className="flex items-center justify-between mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
               <div>
-                <p className="text-xs text-gray-500 mb-1">Contact Information</p>
-                <p className="text-sm text-gray-800 font-medium">{profileData.contactEmail}</p>
-                <p className="text-sm text-gray-800 font-medium">{profileData.contactPhone}</p>
+                <p className="text-xs text-gray-500 mb-1">
+                  Contact Information
+                </p>
+                <p className="text-sm text-gray-800 font-medium">
+                  {profileData.contactEmail}
+                </p>
+                <p className="text-sm text-gray-800 font-medium">
+                  {profileData.contactPhone}
+                </p>
               </div>
               <div className="w-24 h-24 bg-white rounded-xl border-2 border-violet-200 p-2 flex items-center justify-center">
                 <QrCode className="w-16 h-16 text-violet-600" />
@@ -385,7 +418,8 @@ export default function FamilyViewPage() {
                 <span>Confidential – For family use only</span>
               </div>
               <p className="text-xs text-gray-400 mt-2">
-                This profile is protected by Bandhan AI's privacy policy. Unauthorized distribution is prohibited.
+                This profile is protected by Bandhan AI's privacy policy.
+                Unauthorized distribution is prohibited.
               </p>
             </div>
           </div>
@@ -394,7 +428,9 @@ export default function FamilyViewPage() {
           <div className="bg-gradient-to-r from-violet-600 to-rose-600 py-3 text-center print:bg-gray-800">
             <div className="flex items-center justify-center space-x-2">
               <Shield className="w-4 h-4 text-white" />
-              <span className="text-sm font-semibold text-white">Bandhan AI – Verified Profile</span>
+              <span className="text-sm font-semibold text-white">
+                Bandhan AI – Verified Profile
+              </span>
               <Shield className="w-4 h-4 text-white" />
             </div>
           </div>
@@ -473,16 +509,36 @@ export default function FamilyViewPage() {
 // Icon components for detail rows
 function Languages({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+      />
     </svg>
   );
 }
 
 function Church({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2v4m0 0v4m0-4h4m-4 0H8m4 8v6m-3-3h6M5 21h14" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 2v4m0 0v4m0-4h4m-4 0H8m4 8v6m-3-3h6M5 21h14"
+      />
     </svg>
   );
 }
