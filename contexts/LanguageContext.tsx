@@ -10,7 +10,7 @@
  * - No page reload on language switch
  */
 
-'use client';
+"use client";
 
 import {
   createContext,
@@ -19,13 +19,13 @@ import {
   useEffect,
   useCallback,
   ReactNode,
-} from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+} from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
-export type Language = 'en' | 'hi';
+export type Language = "en" | "hi";
 
 export interface TranslationData {
   [key: string]: string | TranslationData;
@@ -65,7 +65,7 @@ async function loadTranslations(lang: Language): Promise<TranslationData> {
   } catch (error) {
     console.error(`Error loading ${lang} translations:`, error);
     // Fallback to English
-    if (lang === 'hi' && translations.en) {
+    if (lang === "hi" && translations.en) {
       return translations.en;
     }
     return {};
@@ -81,36 +81,36 @@ async function loadTranslations(lang: Language): Promise<TranslationData> {
  * Returns 'hi' if device language is Hindi, otherwise 'en'
  */
 function detectDeviceLanguage(): Language {
-  if (typeof navigator === 'undefined') return 'en';
+  if (typeof navigator === "undefined") return "en";
 
   const browserLang = navigator.language.toLowerCase();
   const systemLangs = navigator.languages || [browserLang];
 
   // Check for Hindi variants
-  const hindiVariants = ['hi', 'hi-in', 'hin', 'hindi'];
+  const hindiVariants = ["hi", "hi-in", "hin", "hindi"];
 
   for (const lang of systemLangs) {
     if (hindiVariants.some((h) => lang.includes(h))) {
-      return 'hi';
+      return "hi";
     }
   }
 
-  return 'en';
+  return "en";
 }
 
 /**
  * Get stored language preference from localStorage
  */
 function getStoredLanguage(): Language | null {
-  if (typeof localStorage === 'undefined') return null;
+  if (typeof localStorage === "undefined") return null;
 
   try {
-    const stored = localStorage.getItem('bandhan_language');
-    if (stored === 'en' || stored === 'hi') {
+    const stored = localStorage.getItem("bandhan_language");
+    if (stored === "en" || stored === "hi") {
       return stored;
     }
   } catch (error) {
-    console.error('Error reading language from storage:', error);
+    console.error("Error reading language from storage:", error);
   }
 
   return null;
@@ -120,12 +120,12 @@ function getStoredLanguage(): Language | null {
  * Store language preference to localStorage
  */
 function storeLanguage(lang: Language): void {
-  if (typeof localStorage === 'undefined') return;
+  if (typeof localStorage === "undefined") return;
 
   try {
-    localStorage.setItem('bandhan_language', lang);
+    localStorage.setItem("bandhan_language", lang);
   } catch (error) {
-    console.error('Error storing language preference:', error);
+    console.error("Error storing language preference:", error);
   }
 }
 
@@ -134,25 +134,28 @@ function storeLanguage(lang: Language): void {
  * e.g., 'auth.welcome' -> translations.auth.welcome
  */
 function getNestedValue(obj: TranslationData, path: string): string | null {
-  const keys = path.split('.');
+  const keys = path.split(".");
   let current: TranslationData | string = obj;
 
   for (const key of keys) {
-    if (typeof current === 'object' && current !== null && key in current) {
+    if (typeof current === "object" && current !== null && key in current) {
       current = current[key];
     } else {
       return null;
     }
   }
 
-  return typeof current === 'string' ? current : null;
+  return typeof current === "string" ? current : null;
 }
 
 /**
  * Interpolate parameters in translation string
  * e.g., 'Hello {{name}}' with {name: 'John'} -> 'Hello John'
  */
-function interpolate(str: string, params?: Record<string, string | number>): string {
+function interpolate(
+  str: string,
+  params?: Record<string, string | number>,
+): string {
   if (!params) return str;
 
   return str.replace(/\{\{(\w+)\}\}/g, (match, key) => {
@@ -163,7 +166,10 @@ function interpolate(str: string, params?: Record<string, string | number>): str
 // ─────────────────────────────────────────────────────────────────────────────
 // Context
 // ─────────────────────────────────────────────────────────────────────────────
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined,
+);
+export { LanguageContext };
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Provider Component
@@ -175,11 +181,13 @@ interface LanguageProviderProps {
 
 export function LanguageProvider({
   children,
-  defaultLanguage = 'en',
+  defaultLanguage = "en",
 }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>(defaultLanguage);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadedTranslations, setLoadedTranslations] = useState<Record<Language, TranslationData>>({
+  const [loadedTranslations, setLoadedTranslations] = useState<
+    Record<Language, TranslationData>
+  >({
     en: {},
     hi: {},
   });
@@ -193,8 +201,8 @@ export function LanguageProvider({
 
       // Load translations for both languages
       const [enTranslations, hiTranslations] = await Promise.all([
-        loadTranslations('en'),
-        loadTranslations('hi'),
+        loadTranslations("en"),
+        loadTranslations("hi"),
       ]);
 
       setLoadedTranslations({
@@ -211,22 +219,24 @@ export function LanguageProvider({
 
   // Update document language and font class
   useEffect(() => {
-    if (typeof document === 'undefined') return;
+    if (typeof document === "undefined") return;
 
-    document.documentElement.lang = language === 'hi' ? 'hi' : 'en';
-    document.documentElement.classList.remove('font-inter', 'font-hindi');
-    document.documentElement.classList.add(language === 'hi' ? 'font-hindi' : 'font-inter');
+    document.documentElement.lang = language === "hi" ? "hi" : "en";
+    document.documentElement.classList.remove("font-inter", "font-hindi");
+    document.documentElement.classList.add(
+      language === "hi" ? "font-hindi" : "font-inter",
+    );
 
     // Set CSS variable for text direction (future RTL support)
     document.documentElement.style.setProperty(
-      '--text-direction',
-      language === 'hi' ? 'ltr' : 'ltr'
+      "--text-direction",
+      language === "hi" ? "ltr" : "ltr",
     );
 
     // Adjust line-height for Hindi text (Devanagari needs more space)
     document.documentElement.style.setProperty(
-      '--line-height-base',
-      language === 'hi' ? '1.8' : '1.6'
+      "--line-height-base",
+      language === "hi" ? "1.8" : "1.6",
     );
   }, [language]);
 
@@ -239,7 +249,7 @@ export function LanguageProvider({
   // Toggle between English and Hindi
   const toggleLanguage = useCallback(() => {
     setLanguageState((prev) => {
-      const newLang = prev === 'en' ? 'hi' : 'en';
+      const newLang = prev === "en" ? "hi" : "en";
       storeLanguage(newLang);
       return newLang;
     });
@@ -253,7 +263,7 @@ export function LanguageProvider({
       let value = getNestedValue(currentLangTranslations, key);
 
       // Fallback to English if Hindi translation missing
-      if (!value && language === 'hi') {
+      if (!value && language === "hi") {
         value = getNestedValue(loadedTranslations.en, key);
       }
 
@@ -265,14 +275,14 @@ export function LanguageProvider({
 
       return interpolate(value, params);
     },
-    [language, loadedTranslations]
+    [language, loadedTranslations],
   );
 
   // RTL support (currently LTR for both English and Hindi)
   const isRTL = false;
 
   // Font class for Tailwind
-  const fontClass = language === 'hi' ? 'font-hindi' : 'font-inter';
+  const fontClass = language === "hi" ? "font-hindi" : "font-inter";
 
   const value: LanguageContextType = {
     language,
@@ -298,7 +308,7 @@ export function useLanguage(): LanguageContextType {
   const context = useContext(LanguageContext);
 
   if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    throw new Error("useLanguage must be used within a LanguageProvider");
   }
 
   return context;
@@ -317,28 +327,28 @@ export function useTranslation() {
 // ─────────────────────────────────────────────────────────────────────────────
 export function LanguageToggle({
   className,
-  variant = 'floating',
+  variant = "floating",
 }: {
   className?: string;
-  variant?: 'floating' | 'inline' | 'minimal';
+  variant?: "floating" | "inline" | "minimal";
 }) {
   const { language, toggleLanguage, t } = useLanguage();
 
-  if (variant === 'floating') {
+  if (variant === "floating") {
     return (
       <motion.button
         onClick={toggleLanguage}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className={cn(
-          'fixed top-4 right-4 z-50',
-          'flex items-center space-x-2 px-3 py-2',
-          'rounded-full glass-md border border-white/20',
-          'hover:bg-white/10 transition-colors',
-          'backdrop-blur-md',
-          className
+          "fixed top-4 right-4 z-50",
+          "flex items-center space-x-2 px-3 py-2",
+          "rounded-full glass-md border border-white/20",
+          "hover:bg-white/10 transition-colors",
+          "backdrop-blur-md",
+          className,
         )}
-        aria-label={t('accessibility.language_toggle')}
+        aria-label={t("accessibility.language_toggle")}
       >
         <AnimatePresence mode="wait">
           <motion.span
@@ -349,30 +359,28 @@ export function LanguageToggle({
             transition={{ duration: 0.2 }}
             className="text-lg"
           >
-            {language === 'en' ? '🇮🇳' : '🇬🇧'}
+            {language === "en" ? "🇮🇳" : "🇬🇧"}
           </motion.span>
         </AnimatePresence>
         <span className="text-xs font-medium text-white/80">
-          {language === 'en' ? 'हिंदी' : 'English'}
+          {language === "en" ? "हिंदी" : "English"}
         </span>
       </motion.button>
     );
   }
 
-  if (variant === 'minimal') {
+  if (variant === "minimal") {
     return (
       <button
         onClick={toggleLanguage}
         className={cn(
-          'flex items-center space-x-1 px-2 py-1',
-          'rounded-lg hover:bg-white/5 transition-colors',
-          className
+          "flex items-center space-x-1 px-2 py-1",
+          "rounded-lg hover:bg-white/5 transition-colors",
+          className,
         )}
-        aria-label={t('accessibility.language_toggle')}
+        aria-label={t("accessibility.language_toggle")}
       >
-        <span className="text-sm">
-          {language === 'en' ? '🇮🇳' : '🇬🇧'}
-        </span>
+        <span className="text-sm">{language === "en" ? "🇮🇳" : "🇬🇧"}</span>
       </button>
     );
   }
@@ -382,18 +390,16 @@ export function LanguageToggle({
     <button
       onClick={toggleLanguage}
       className={cn(
-        'flex items-center space-x-2 px-3 py-1.5',
-        'rounded-xl glass-sm border border-white/10',
-        'hover:bg-white/10 transition-colors',
-        className
+        "flex items-center space-x-2 px-3 py-1.5",
+        "rounded-xl glass-sm border border-white/10",
+        "hover:bg-white/10 transition-colors",
+        className,
       )}
-      aria-label={t('accessibility.language_toggle')}
+      aria-label={t("accessibility.language_toggle")}
     >
-      <span className="text-base">
-        {language === 'en' ? '🇮🇳' : '🇬🇧'}
-      </span>
+      <span className="text-base">{language === "en" ? "🇮🇳" : "🇬🇧"}</span>
       <span className="text-sm text-white/80">
-        {language === 'en' ? 'हिंदी' : 'English'}
+        {language === "en" ? "हिंदी" : "English"}
       </span>
     </button>
   );
@@ -402,10 +408,10 @@ export function LanguageToggle({
 // ─────────────────────────────────────────────────────────────────────────────
 // Utility: Get current language direction
 // ─────────────────────────────────────────────────────────────────────────────
-export function getTextDirection(lang?: Language): 'ltr' | 'rtl' {
+export function getTextDirection(lang?: Language): "ltr" | "rtl" {
   // Currently both English and Hindi are LTR
   // Future: Add support for Arabic/Urdu (RTL)
-  return 'ltr';
+  return "ltr";
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -413,14 +419,14 @@ export function getTextDirection(lang?: Language): 'ltr' | 'rtl' {
 // Hindi text is typically 20-30% longer than English
 // ─────────────────────────────────────────────────────────────────────────────
 export function getExpansionFactor(lang: Language): number {
-  return lang === 'hi' ? 1.3 : 1.0;
+  return lang === "hi" ? 1.3 : 1.0;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helper for cn (classname utility)
 // ─────────────────────────────────────────────────────────────────────────────
 function cn(...classes: (string | undefined | null | false)[]) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 export default LanguageProvider;
