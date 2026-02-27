@@ -475,7 +475,7 @@ export function LimitCounterExpanded({
         isOpen={showUpsellModal}
         onClose={() => setShowUpsellModal(false)}
         triggerSource="limit_reached"
-        limitType={fullConfig.actionType}
+        limitType={fullConfig.actionType as "profiles" | "chats" | "likes"}
       />
     </>
   );
