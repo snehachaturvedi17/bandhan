@@ -1,13 +1,26 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, ShieldCheck, RefreshCw, Lock, Building2 } from 'lucide-react';
-import { verifyOTP } from '@/lib/auth';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { useState, useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Loader2,
+  ShieldCheck,
+  RefreshCw,
+  Lock,
+  Building2,
+  TestTube2,
+} from "lucide-react";
+import { verifyOTP } from "@/lib/auth";
+import {
+  getMockCurrentUser,
+  enableDemoMode,
+  getDemoOTP,
+} from "@/lib/mock-auth";
+import { useDemoMode } from "@/hooks/useDemoMode";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 function cn(...classes: (string | undefined | null | false)[]) {
   return twMerge(clsx(classes));
@@ -16,9 +29,10 @@ function cn(...classes: (string | undefined | null | false)[]) {
 export default function OTPVerifyPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const demoMode = useDemoMode();
 
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resendTimer, setResendTimer] = useState(30);
@@ -65,15 +79,18 @@ export default function OTPVerifyPage() {
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData('text').slice(0, 6);
+    const pastedData = e.clipboardData.getData("text").slice(0, 6);
 
     if (!/^\d+$/.test(pastedData)) return;
 
@@ -89,41 +106,73 @@ export default function OTPVerifyPage() {
   };
 
   const handleVerify = async () => {
-    const otpCode = otp.join('');
+    const otpCode = otp.join("");
 
     if (otpCode.length !== 6) {
-      setError('Please enter the complete 6-digit OTP');
+      setError("Please enter the complete 6-digit OTP");
       return;
+    }
+
+    // Demo mode: Check for demo OTP
+    if (demoMode.isActive) {
+      const demoOTP = localStorage.getItem("demo_otp") || getDemoOTP();
+      if (otpCode !== demoOTP) {
+        setError(`Invalid OTP. In demo mode, use: ${demoOTP}`);
+        return;
+      }
     }
 
     setIsLoading(true);
     setError(null);
 
     try {
-      const phoneNumber = localStorage.getItem('pending_phone');
+      const phoneNumber = localStorage.getItem("pending_phone");
       if (!phoneNumber) {
-        throw new Error('Phone number not found. Please login again.');
+        throw new Error("Phone number not found. Please login again.");
       }
 
-      // Get confirmation result from session storage or recreate
-      // In production, you'd store the confirmationResult reference properly
+      // Demo mode: Use mock user
+      if (demoMode.isActive) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // Get demo user or create mock user
+        const { DEMO_USERS } = await import("@/data/demo-users");
+        const randomDemoUser =
+          DEMO_USERS[Math.floor(Math.random() * DEMO_USERS.length)];
+
+        const mockUser = {
+          ...randomDemoUser,
+          phone: phoneNumber,
+          demoMode: true,
+        };
+
+        localStorage.setItem("mock_user", JSON.stringify(mockUser));
+        localStorage.setItem("mock_auth_token", `mock_token_${Date.now()}`);
+        localStorage.setItem("demo_mode", "true");
+        localStorage.removeItem("pending_phone");
+        localStorage.removeItem("demo_otp");
+
+        console.log("✅ Demo mode: Logged in as", mockUser.name);
+        router.push(callbackUrl);
+        return;
+      }
+
+      // Production mode: Use real Firebase auth
       const confirmationResult = (window as any).confirmationResult;
 
       if (!confirmationResult) {
-        // For demo purposes, simulate successful verification
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        // Store auth token and user data
-        const mockToken = 'mock_jwt_token_' + Date.now();
+        const mockToken = "mock_jwt_token_" + Date.now();
         const mockUser = {
           phoneNumber,
-          uid: 'user_' + Date.now(),
+          uid: "user_" + Date.now(),
           isPremium: false,
         };
 
-        localStorage.setItem('auth_token', mockToken);
-        localStorage.setItem('user', JSON.stringify(mockUser));
-        localStorage.removeItem('pending_phone');
+        localStorage.setItem("auth_token", mockToken);
+        localStorage.setItem("user", JSON.stringify(mockUser));
+        localStorage.removeItem("pending_phone");
 
         router.push(callbackUrl);
         return;
@@ -141,13 +190,13 @@ export default function OTPVerifyPage() {
         isPremium: false,
       };
 
-      localStorage.setItem('auth_token', idToken);
-      localStorage.setItem('user', JSON.stringify(userData));
-      localStorage.removeItem('pending_phone');
+      localStorage.setItem("auth_token", idToken);
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.removeItem("pending_phone");
 
       router.push(callbackUrl);
     } catch (err: any) {
-      setError(err.message || 'Invalid OTP. Please try again.');
+      setError(err.message || "Invalid OTP. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -160,18 +209,18 @@ export default function OTPVerifyPage() {
     setError(null);
 
     try {
-      const phoneNumber = localStorage.getItem('pending_phone');
+      const phoneNumber = localStorage.getItem("pending_phone");
       if (!phoneNumber) {
-        throw new Error('Phone number not found. Please login again.');
+        throw new Error("Phone number not found. Please login again.");
       }
 
       // Resend OTP
-      await import('@/lib/auth').then(({ sendOTP }) => sendOTP(phoneNumber));
+      await import("@/lib/auth").then(({ sendOTP }) => sendOTP(phoneNumber));
 
       // Reset timer
       setResendTimer(30);
       setCanResend(false);
-      setOtp(['', '', '', '', '', '']);
+      setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
 
       // Restart timer
@@ -186,7 +235,7 @@ export default function OTPVerifyPage() {
         });
       }, 1000);
     } catch (err: any) {
-      setError(err.message || 'Failed to resend OTP. Please try again.');
+      setError(err.message || "Failed to resend OTP. Please try again.");
     } finally {
       setIsResending(false);
     }
@@ -194,7 +243,7 @@ export default function OTPVerifyPage() {
 
   const handleDigiLockerLogin = () => {
     // Redirect to DigiLocker OAuth
-    const digilockerAuthUrl = `https://digilocker.meripehchaan.gov.in/public/oauth2/1/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_DIGILOCKER_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_DIGILOCKER_REDIRECT_URI || '')}&scope=profile`;
+    const digilockerAuthUrl = `https://digilocker.meripehchaan.gov.in/public/oauth2/1/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_DIGILOCKER_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_DIGILOCKER_REDIRECT_URI || "")}&scope=profile`;
     window.location.href = digilockerAuthUrl;
   };
 
@@ -212,6 +261,28 @@ export default function OTPVerifyPage() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-md"
       >
+        {/* Demo Mode Banner */}
+        {demoMode.isActive && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30"
+          >
+            <div className="flex items-center space-x-2">
+              <TestTube2 className="w-4 h-4 text-red-400" />
+              <div className="flex-1">
+                <p className="text-xs text-red-200 font-semibold">Demo Mode</p>
+                <p className="text-xs text-red-300">
+                  Use OTP:{" "}
+                  <code className="bg-red-500/20 px-1.5 py-0.5 rounded font-mono">
+                    {getDemoOTP()}
+                  </code>
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Card */}
         <div className="glass-md rounded-3xl p-8 border border-white/10">
           {/* Header */}
@@ -219,7 +290,7 @@ export default function OTPVerifyPage() {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', delay: 0.2 }}
+              transition={{ type: "spring", delay: 0.2 }}
               className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-saffron-500/20 to-violet-500/20 border border-white/10 mb-4"
             >
               <ShieldCheck className="w-8 h-8 text-gradient-brand" />
@@ -247,11 +318,11 @@ export default function OTPVerifyPage() {
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
                   className={cn(
-                    'w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold rounded-xl',
-                    'bg-white/5 border border-white/10',
-                    'text-midnight-50 placeholder:text-midnight-600',
-                    'focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50',
-                    'transition-all duration-200'
+                    "w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold rounded-xl",
+                    "bg-white/5 border border-white/10",
+                    "text-midnight-50 placeholder:text-midnight-600",
+                    "focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50",
+                    "transition-all duration-200",
                   )}
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -275,14 +346,18 @@ export default function OTPVerifyPage() {
             <motion.button
               type="button"
               onClick={handleVerify}
-              disabled={isLoading || otp.join('').length !== 6}
-              whileHover={{ scale: isLoading || otp.join('').length !== 6 ? 1 : 1.02 }}
-              whileTap={{ scale: isLoading || otp.join('').length !== 6 ? 1 : 0.98 }}
+              disabled={isLoading || otp.join("").length !== 6}
+              whileHover={{
+                scale: isLoading || otp.join("").length !== 6 ? 1 : 1.02,
+              }}
+              whileTap={{
+                scale: isLoading || otp.join("").length !== 6 ? 1 : 0.98,
+              }}
               className={cn(
-                'w-full py-3.5 rounded-xl font-semibold text-white',
-                'bg-gradient-to-r from-saffron-500 to-violet-500',
-                'hover:shadow-saffron-glow transition-all duration-300',
-                'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none'
+                "w-full py-3.5 rounded-xl font-semibold text-white",
+                "bg-gradient-to-r from-saffron-500 to-violet-500",
+                "hover:shadow-saffron-glow transition-all duration-300",
+                "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none",
               )}
             >
               {isLoading ? (
@@ -291,14 +366,14 @@ export default function OTPVerifyPage() {
                   <span>Verifying...</span>
                 </span>
               ) : (
-                'Verify OTP'
+                "Verify OTP"
               )}
             </motion.button>
 
             {/* Resend OTP */}
             <div className="text-center">
               <p className="text-sm text-midnight-400">
-                Didn't receive the code?{' '}
+                Didn't receive the code?{" "}
                 {canResend ? (
                   <button
                     onClick={handleResend}
@@ -351,7 +426,7 @@ export default function OTPVerifyPage() {
               ) : (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
+                  animate={{ opacity: 1, height: "auto" }}
                   className="space-y-3"
                 >
                   <div className="p-4 rounded-xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/30">
@@ -362,7 +437,8 @@ export default function OTPVerifyPage() {
                           DigiLocker Verified Profile
                         </p>
                         <p className="text-xs text-midnight-400 mb-3">
-                          Verify your identity using your government-issued ID for marriage matchmaking
+                          Verify your identity using your government-issued ID
+                          for marriage matchmaking
                         </p>
                         <button
                           onClick={handleDigiLockerLogin}

@@ -74,7 +74,7 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 30,
     // Standard responsive breakpoints + Indian mid-range handsets
     deviceSizes: [360, 414, 480, 640, 750, 828, 1080, 1200, 1920],
-    imageSizes:  [16, 32, 48, 64, 96, 128, 192, 256, 384],
+    imageSizes: [16, 32, 48, 64, 96, 128, 192, 256, 384],
     // Disable dangerouslyAllowSVG for security
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -83,9 +83,10 @@ const nextConfig = {
   // ─── Compiler ─────────────────────────────────────────────────────
   compiler: {
     // Remove console logs in production
-    removeConsole: process.env.NODE_ENV === "production"
-      ? { exclude: ["error", "warn"] }
-      : false,
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? { exclude: ["error", "warn"] }
+        : false,
   },
 
   // ─── Experimental Features ────────────────────────────────────────
@@ -125,14 +126,50 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source:      "/home",
+        source: "/home",
         destination: "/discover",
-        permanent:   true,
+        permanent: true,
       },
       {
-        source:      "/signup",
+        source: "/signup",
         destination: "/register",
-        permanent:   true,
+        permanent: true,
+      },
+    ];
+  },
+
+  // ─── Rewrites (Mock API for Demo Mode) ───────────────────────────
+  async rewrites() {
+    return [
+      // Rewrite all /api/* requests to mock API handlers
+      {
+        source: "/api/:path*",
+        destination: "/api/mock/:path*",
+      },
+      // Rewrite auth endpoints to mock auth
+      {
+        source: "/api/auth/:path*",
+        destination: "/api/mock/auth/:path*",
+      },
+      // Rewrite matches endpoints
+      {
+        source: "/api/matches/:path*",
+        destination: "/api/mock/matches/:path*",
+      },
+      // Rewrite chat endpoints
+      {
+        source: "/api/chat/:path*",
+        destination: "/api/mock/chat/:path*",
+      },
+      // Rewrite profile endpoints
+      {
+        source: "/api/profile/:path*",
+        destination: "/api/mock/profile/:path*",
+      },
+      // Rewrite subscription endpoints
+      {
+        source: "/api/subscription/:path*",
+        destination: "/api/mock/subscription/:path*",
       },
     ];
   },
@@ -144,31 +181,31 @@ const nextConfig = {
         source: "/(.*)",
         headers: [
           {
-            key:   "X-DNS-Prefetch-Control",
+            key: "X-DNS-Prefetch-Control",
             value: "on",
           },
           {
-            key:   "Strict-Transport-Security",
+            key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
           },
           {
-            key:   "X-Frame-Options",
+            key: "X-Frame-Options",
             value: "SAMEORIGIN",
           },
           {
-            key:   "X-Content-Type-Options",
+            key: "X-Content-Type-Options",
             value: "nosniff",
           },
           {
-            key:   "Referrer-Policy",
+            key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
           },
           {
-            key:   "Permissions-Policy",
+            key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(self)",
           },
           {
-            key:   "X-XSS-Protection",
+            key: "X-XSS-Protection",
             value: "1; mode=block",
           },
         ],
@@ -178,7 +215,7 @@ const nextConfig = {
         source: "/static/(.*)",
         headers: [
           {
-            key:   "Cache-Control",
+            key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
           },
         ],
@@ -188,7 +225,7 @@ const nextConfig = {
         source: "/api/(.*)",
         headers: [
           {
-            key:   "Cache-Control",
+            key: "Cache-Control",
             value: "no-store, no-cache, must-revalidate",
           },
         ],
@@ -201,50 +238,60 @@ const nextConfig = {
   // All others remain server-only.
   env: {
     // App
-    NEXT_PUBLIC_APP_NAME:    process.env.NEXT_PUBLIC_APP_NAME    ?? "Bandhan AI",
-    NEXT_PUBLIC_APP_URL:     process.env.NEXT_PUBLIC_APP_URL     ?? "https://bandhan.ai",
+    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME ?? "Bandhan AI",
+    NEXT_PUBLIC_APP_URL:
+      process.env.NEXT_PUBLIC_APP_URL ?? "https://bandhan.ai",
     NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0",
 
     // Firebase (client-safe)
-    NEXT_PUBLIC_FIREBASE_API_KEY:             process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:         process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    NEXT_PUBLIC_FIREBASE_PROJECT_ID:          process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET:      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    NEXT_PUBLIC_FIREBASE_APP_ID:              process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID:      process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:
+      process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID:
+      process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET:
+      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
+      process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID:
+      process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 
     // Razorpay (public key only)
     NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
 
     // CDN
-    NEXT_PUBLIC_CDN_URL:     process.env.NEXT_PUBLIC_CDN_URL     ?? "https://cdn.bandhan.ai",
-    NEXT_PUBLIC_MEDIA_URL:   process.env.NEXT_PUBLIC_MEDIA_URL   ?? "https://bandhan-media.s3.ap-south-1.amazonaws.com",
+    NEXT_PUBLIC_CDN_URL:
+      process.env.NEXT_PUBLIC_CDN_URL ?? "https://cdn.bandhan.ai",
+    NEXT_PUBLIC_MEDIA_URL:
+      process.env.NEXT_PUBLIC_MEDIA_URL ??
+      "https://bandhan-media.s3.ap-south-1.amazonaws.com",
 
     // Feature flags
-    NEXT_PUBLIC_ENABLE_KUNDALI: process.env.NEXT_PUBLIC_ENABLE_KUNDALI ?? "true",
-    NEXT_PUBLIC_ENABLE_VIDEO:   process.env.NEXT_PUBLIC_ENABLE_VIDEO   ?? "true",
-    NEXT_PUBLIC_MAINTENANCE:    process.env.NEXT_PUBLIC_MAINTENANCE     ?? "false",
+    NEXT_PUBLIC_ENABLE_KUNDALI:
+      process.env.NEXT_PUBLIC_ENABLE_KUNDALI ?? "true",
+    NEXT_PUBLIC_ENABLE_VIDEO: process.env.NEXT_PUBLIC_ENABLE_VIDEO ?? "true",
+    NEXT_PUBLIC_MAINTENANCE: process.env.NEXT_PUBLIC_MAINTENANCE ?? "false",
   },
 
   // ─── Webpack Customisation ────────────────────────────────────────
   webpack(config, { isServer }) {
     // Handle SVG as React components
     config.module.rules.push({
-      test:    /\.svg$/,
-      use:     ["@svgr/webpack"],
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
     });
 
     // Prevent firebase-admin from being bundled on the client
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
-        fs:            false,
-        net:           false,
-        tls:           false,
+        fs: false,
+        net: false,
+        tls: false,
         child_process: false,
-        crypto:        require.resolve("crypto-browserify"),
-        stream:        require.resolve("stream-browserify"),
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
       };
     }
 
@@ -252,17 +299,17 @@ const nextConfig = {
   },
 
   // ─── Output ───────────────────────────────────────────────────────
-  output:           "standalone", // optimal for Docker / serverless on AWS India
-  poweredByHeader:  false,        // hide "X-Powered-By: Next.js"
-  compress:         true,
-  reactStrictMode:  true,
-  swcMinify:        true,
+  output: "standalone", // optimal for Docker / serverless on AWS India
+  poweredByHeader: false, // hide "X-Powered-By: Next.js"
+  compress: true,
+  reactStrictMode: true,
+  swcMinify: true,
 
   // ─── Internationalisation (Indian languages) ─────────────────────
+  // Note: i18n localeDetection is disabled - using custom LanguageContext instead
   i18n: {
-    locales:       ["en-IN", "hi", "bn", "ta", "te", "mr", "gu", "kn", "ml", "pa"],
+    locales: ["en-IN"],
     defaultLocale: "en-IN",
-    localeDetection: true,
   },
 };
 

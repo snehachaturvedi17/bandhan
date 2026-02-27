@@ -1,11 +1,12 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
+import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   getAuth,
   RecaptchaVerifier,
   signInWithPhoneNumber,
   type ConfirmationResult,
-} from 'firebase/auth';
-import { getAnalytics, isSupported } from 'firebase/analytics';
+  type Auth,
+} from "firebase/auth";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,23 +19,46 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase (singleton pattern)
+// Initialize Firebase (singleton pattern) with error handling
+let app: any = null;
+let auth: Auth | null = null;
+
 function initFirebase() {
-  if (!getApps().length) {
-    return initializeApp(firebaseConfig);
+  try {
+    if (!getApps().length) {
+      // Check if API key is configured
+      if (
+        !firebaseConfig.apiKey ||
+        firebaseConfig.apiKey === "your_api_key_here"
+      ) {
+        console.warn(
+          "⚠️ Firebase not configured: Using mock auth. Set NEXT_PUBLIC_FIREBASE_API_KEY to use real auth.",
+        );
+        return null;
+      }
+      return initializeApp(firebaseConfig);
+    }
+    return getApp();
+  } catch (error) {
+    console.warn("⚠️ Firebase initialization failed:", error);
+    return null;
   }
-  return getApp();
 }
 
-const app = initFirebase();
-
-// Initialize Auth
-export const auth = getAuth(app);
+try {
+  app = initFirebase();
+  if (app) {
+    auth = getAuth(app);
+  }
+} catch (error) {
+  console.warn("⚠️ Firebase Auth not available:", error);
+}
 
 // Initialize Analytics (client-side only)
-export const analytics = typeof window !== 'undefined' && isSupported()
-  ? getAnalytics(app)
-  : null;
+export const analytics =
+  typeof window !== "undefined" && isSupported() && app
+    ? getAnalytics(app)
+    : null;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // OTP Functions
@@ -48,8 +72,16 @@ export const analytics = typeof window !== 'undefined' && isSupported()
  */
 export async function sendOTP(
   phoneNumber: string,
-  containerId: string = 'recaptcha-container'
+  containerId: string = "recaptcha-container",
 ): Promise<ConfirmationResult> {
+  // Check if Firebase auth is available
+  if (!auth) {
+    console.warn("⚠️ Firebase auth not configured. Use mock auth instead.");
+    throw new Error(
+      "Firebase not configured. Please use demo mode or configure Firebase credentials.",
+    );
+  }
+
   try {
     // Setup reCAPTCHA verifier (only needed once per page load)
     if (!(window as any).recaptchaVerifier) {
@@ -57,31 +89,31 @@ export async function sendOTP(
         auth,
         containerId,
         {
-          size: 'invisible',
+          size: "invisible",
           callback: (response: any) => {
-            console.log('reCAPTCHA solved:', response);
+            console.log("reCAPTCHA solved:", response);
           },
-          'expired-callback': () => {
-            console.log('reCAPTCHA expired');
+          "expired-callback": () => {
+            console.log("reCAPTCHA expired");
             (window as any).recaptchaVerifier = null;
           },
-          'error-callback': (error: any) => {
-            console.error('reCAPTCHA error:', error);
+          "error-callback": (error: any) => {
+            console.error("reCAPTCHA error:", error);
             (window as any).recaptchaVerifier = null;
           },
-        }
+        },
       );
     }
 
     const confirmationResult = await signInWithPhoneNumber(
       auth,
       phoneNumber,
-      (window as any).recaptchaVerifier
+      (window as any).recaptchaVerifier,
     );
 
     return confirmationResult;
   } catch (error: any) {
-    console.error('Error sending OTP:', error);
+    console.error("Error sending OTP:", error);
     throw new Error(getAuthErrorMessage(error.code));
   }
 }
@@ -94,13 +126,13 @@ export async function sendOTP(
  */
 export async function verifyOTP(
   confirmationResult: ConfirmationResult,
-  otp: string
+  otp: string,
 ) {
   try {
     const result = await confirmationResult.confirm(otp);
     return result;
   } catch (error: any) {
-    console.error('Error verifying OTP:', error);
+    console.error("Error verifying OTP:", error);
     throw new Error(getAuthErrorMessage(error.code));
   }
 }
@@ -110,19 +142,21 @@ export async function verifyOTP(
  */
 function getAuthErrorMessage(errorCode: string): string {
   const errorMessages: Record<string, string> = {
-    'auth/invalid-phone-number': 'Please enter a valid phone number.',
-    'auth/missing-phone-number': 'Phone number is required.',
-    'auth/quota-exceeded': 'Too many attempts. Please try again later.',
-    'auth/too-many-requests': 'Too many attempts. Please try again later.',
-    'auth/operation-not-allowed': 'Phone authentication is not enabled.',
-    'auth/captcha-check-failed': 'reCAPTCHA verification failed. Please try again.',
-    'auth/invalid-verification-code': 'Invalid OTP. Please try again.',
-    'auth/code-expired': 'OTP has expired. Please request a new one.',
-    'auth/network-request-failed': 'Network error. Please check your connection.',
-    'auth/requires-recent-login': 'Please login again to continue.',
+    "auth/invalid-phone-number": "Please enter a valid phone number.",
+    "auth/missing-phone-number": "Phone number is required.",
+    "auth/quota-exceeded": "Too many attempts. Please try again later.",
+    "auth/too-many-requests": "Too many attempts. Please try again later.",
+    "auth/operation-not-allowed": "Phone authentication is not enabled.",
+    "auth/captcha-check-failed":
+      "reCAPTCHA verification failed. Please try again.",
+    "auth/invalid-verification-code": "Invalid OTP. Please try again.",
+    "auth/code-expired": "OTP has expired. Please request a new one.",
+    "auth/network-request-failed":
+      "Network error. Please check your connection.",
+    "auth/requires-recent-login": "Please login again to continue.",
   };
 
-  return errorMessages[errorCode] || 'Authentication failed. Please try again.';
+  return errorMessages[errorCode] || "Authentication failed. Please try again.";
 }
 
 /**
@@ -130,12 +164,12 @@ function getAuthErrorMessage(errorCode: string): string {
  */
 export async function signOut() {
   try {
-    const { signOut: firebaseSignOut } = await import('firebase/auth');
+    const { signOut: firebaseSignOut } = await import("firebase/auth");
     await firebaseSignOut(auth);
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user');
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user");
   } catch (error) {
-    console.error('Error signing out:', error);
+    console.error("Error signing out:", error);
     throw error;
   }
 }

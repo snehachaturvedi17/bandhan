@@ -1,63 +1,84 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import PhoneInput, { Country, getCountryCallingCode } from 'react-phone-number-input';
-import { Loader2, Shield, Globe, Smartphone, Lock } from 'lucide-react';
-import { sendOTP } from '@/lib/auth';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import PhoneInput, {
+  Country,
+  getCountryCallingCode,
+} from "react-phone-number-input";
+import {
+  Loader2,
+  Shield,
+  Globe,
+  Smartphone,
+  Lock,
+  TestTube2,
+} from "lucide-react";
+import { sendOTP } from "@/lib/auth";
+import { mockSendOTP, getDemoOTP, enableDemoMode } from "@/lib/mock-auth";
+import { useDemoMode } from "@/hooks/useDemoMode";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-import 'react-phone-number-input/style.css';
+import "react-phone-number-input/style.css";
 
 function cn(...classes: (string | undefined | null | false)[]) {
   return twMerge(clsx(classes));
 }
 
 // Indian carriers for detection simulation
-const INDIAN_CARRIERS = ['Jio', 'Airtel', 'Vi (Vodafone Idea)', 'BSNL', 'MTNL'] as const;
-type Carrier = typeof INDIAN_CARRIERS[number];
+const INDIAN_CARRIERS = [
+  "Jio",
+  "Airtel",
+  "Vi (Vodafone Idea)",
+  "BSNL",
+  "MTNL",
+] as const;
+type Carrier = (typeof INDIAN_CARRIERS)[number];
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const demoMode = useDemoMode();
 
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [detectedCarrier, setDetectedCarrier] = useState<Carrier | null>(null);
-  const [language, setLanguage] = useState<'en' | 'hi'>('en');
+  const [language, setLanguage] = useState<"en" | "hi">("en");
+  const [showDemoInfo, setShowDemoInfo] = useState(false);
 
   // Translations
   const t = {
     en: {
-      title: 'Welcome Back',
-      subtitle: 'Enter your phone number to continue',
-      phoneLabel: 'Phone Number',
-      sendOtp: 'Send OTP',
-      sending: 'Sending OTP...',
+      title: "Welcome Back",
+      subtitle: "Enter your phone number to continue",
+      phoneLabel: "Phone Number",
+      sendOtp: "Send OTP",
+      sending: "Sending OTP...",
       carrierMessage: (carrier: Carrier) => `OTP will be sent via ${carrier}`,
-      termsText: 'By continuing, you agree to our',
-      terms: 'Terms of Service',
-      and: 'and',
-      privacy: 'Privacy Policy',
-      language: 'हिंदी',
+      termsText: "By continuing, you agree to our",
+      terms: "Terms of Service",
+      and: "and",
+      privacy: "Privacy Policy",
+      language: "हिंदी",
     },
     hi: {
-      title: 'वापस स्वागत है',
-      subtitle: 'जारी रखने के लिए अपना फ़ोन नंबर दर्ज करें',
-      phoneLabel: 'फ़ोन नंबर',
-      sendOtp: 'OTP भेजें',
-      sending: 'OTP भेजा जा रहा है...',
-      carrierMessage: (carrier: Carrier) => `OTP ${carrier} के माध्यम से भेजा जाएगा`,
-      termsText: 'जारी रखकर, आप हमारे',
-      terms: 'सेवा की शर्तों',
-      and: 'और',
-      privacy: 'गोपनीयता नीति',
-      language: 'English',
+      title: "वापस स्वागत है",
+      subtitle: "जारी रखने के लिए अपना फ़ोन नंबर दर्ज करें",
+      phoneLabel: "फ़ोन नंबर",
+      sendOtp: "OTP भेजें",
+      sending: "OTP भेजा जा रहा है...",
+      carrierMessage: (carrier: Carrier) =>
+        `OTP ${carrier} के माध्यम से भेजा जाएगा`,
+      termsText: "जारी रखकर, आप हमारे",
+      terms: "सेवा की शर्तों",
+      and: "और",
+      privacy: "गोपनीयता नीति",
+      language: "English",
     },
   };
 
@@ -65,19 +86,21 @@ export default function LoginPage() {
 
   // Simulate carrier detection based on phone number prefix
   useEffect(() => {
-    if (phoneNumber && phoneNumber.startsWith('+91')) {
+    if (phoneNumber && phoneNumber.startsWith("+91")) {
       const numberPart = phoneNumber.slice(3);
       const firstDigit = numberPart.charAt(0);
 
       // Simple simulation based on first digit
       const carrierMap: Record<string, Carrier> = {
-        '6': 'Jio',
-        '7': 'Jio',
-        '8': 'Airtel',
-        '9': 'Vi (Vodafone Idea)',
+        "6": "Jio",
+        "7": "Jio",
+        "8": "Airtel",
+        "9": "Vi (Vodafone Idea)",
       };
 
-      const detected = carrierMap[firstDigit] || INDIAN_CARRIERS[Math.floor(Math.random() * INDIAN_CARRIERS.length)];
+      const detected =
+        carrierMap[firstDigit] ||
+        INDIAN_CARRIERS[Math.floor(Math.random() * INDIAN_CARRIERS.length)];
       setDetectedCarrier(detected);
     } else {
       setDetectedCarrier(null);
@@ -89,31 +112,41 @@ export default function LoginPage() {
     setError(null);
 
     if (!phoneNumber) {
-      setError('Please enter your phone number');
+      setError("Please enter your phone number");
       return;
     }
 
-    if (!phoneNumber.startsWith('+91') || phoneNumber.length !== 15) {
-      setError('Please enter a valid Indian phone number');
+    if (!phoneNumber.startsWith("+91") || phoneNumber.length !== 15) {
+      setError("Please enter a valid Indian phone number");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await sendOTP(phoneNumber);
-      // Store phone number for OTP verification
-      localStorage.setItem('pending_phone', phoneNumber);
-      router.push(`/login/otp-verify?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+      // Use mock auth in demo mode, real auth otherwise
+      if (demoMode.isActive) {
+        console.log("🎭 Demo mode: Using mock OTP");
+        await mockSendOTP(phoneNumber);
+        localStorage.setItem("pending_phone", phoneNumber);
+        localStorage.setItem("demo_otp", getDemoOTP());
+      } else {
+        await sendOTP(phoneNumber);
+        localStorage.setItem("pending_phone", phoneNumber);
+      }
+
+      router.push(
+        `/login/otp-verify?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+      );
     } catch (err: any) {
-      setError(err.message || 'Failed to send OTP. Please try again.');
+      setError(err.message || "Failed to send OTP. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   const toggleLanguage = () => {
-    setLanguage((prev) => (prev === 'en' ? 'hi' : 'en'));
+    setLanguage((prev) => (prev === "en" ? "hi" : "en"));
   };
 
   return (
@@ -130,16 +163,72 @@ export default function LoginPage() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-md"
       >
-        {/* Language Toggle */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={toggleLanguage}
-          className="absolute -top-12 right-0 flex items-center space-x-2 px-3 py-1.5 rounded-full glass-sm text-sm text-midnight-300 hover:text-violet-400 transition-colors"
-        >
-          <Globe className="w-4 h-4" />
-          <span>{currentText.language}</span>
-        </motion.button>
+        {/* Top Actions */}
+        <div className="flex items-center justify-end space-x-2 mb-4">
+          {/* Demo Mode Toggle */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              if (demoMode.isActive) {
+                demoMode.disable();
+              } else {
+                demoMode.enable();
+              }
+            }}
+            className={cn(
+              "flex items-center space-x-1.5 px-3 py-1.5 rounded-full glass-sm text-sm transition-colors",
+              demoMode.isActive
+                ? "bg-red-500/20 border border-red-500/30 text-red-400"
+                : "text-midnight-300 hover:text-violet-400",
+            )}
+          >
+            <TestTube2 className="w-4 h-4" />
+            <span>{demoMode.isActive ? "Demo On" : "Demo Mode"}</span>
+          </motion.button>
+
+          {/* Language Toggle */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleLanguage}
+            className="flex items-center space-x-2 px-3 py-1.5 rounded-full glass-sm text-sm text-midnight-300 hover:text-violet-400 transition-colors"
+          >
+            <Globe className="w-4 h-4" />
+            <span>{currentText.language}</span>
+          </motion.button>
+        </div>
+
+        {/* Demo Info Banner */}
+        {demoMode.isActive && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30"
+          >
+            <div className="flex items-start space-x-2">
+              <TestTube2 className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-xs text-red-200 font-semibold">
+                  Demo Mode Active
+                </p>
+                <p className="text-xs text-red-300 mt-1">
+                  Use OTP{" "}
+                  <code className="bg-red-500/20 px-1.5 py-0.5 rounded font-mono">
+                    {getDemoOTP()}
+                  </code>{" "}
+                  for any phone number
+                </p>
+              </div>
+              <button
+                onClick={() => setShowDemoInfo(!showDemoInfo)}
+                className="text-xs text-red-400 hover:text-red-300"
+              >
+                {showDemoInfo ? "Hide" : "Info"}
+              </button>
+            </div>
+          </motion.div>
+        )}
 
         {/* Card */}
         <div className="glass-md rounded-3xl p-8 border border-white/10">
@@ -148,7 +237,7 @@ export default function LoginPage() {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', delay: 0.2 }}
+              transition={{ type: "spring", delay: 0.2 }}
               className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-saffron-500/20 to-violet-500/20 border border-white/10 mb-4"
             >
               <Shield className="w-8 h-8 text-gradient-brand" />
@@ -156,9 +245,7 @@ export default function LoginPage() {
             <h1 className="text-2xl font-bold text-gradient-brand mb-2">
               {currentText.title}
             </h1>
-            <p className="text-midnight-300 text-sm">
-              {currentText.subtitle}
-            </p>
+            <p className="text-midnight-300 text-sm">{currentText.subtitle}</p>
           </div>
 
           {/* Form */}
@@ -176,12 +263,12 @@ export default function LoginPage() {
                   onChange={setPhoneNumber}
                   placeholder="Enter phone number"
                   className={cn(
-                    'w-full px-4 py-3.5 pl-12 rounded-xl',
-                    'bg-white/5 border border-white/10',
-                    'text-midnight-50 placeholder:text-midnight-400',
-                    'focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50',
-                    'transition-all duration-200',
-                    'PhoneInput--focus:border-violet-500/50'
+                    "w-full px-4 py-3.5 pl-12 rounded-xl",
+                    "bg-white/5 border border-white/10",
+                    "text-midnight-50 placeholder:text-midnight-400",
+                    "focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50",
+                    "transition-all duration-200",
+                    "PhoneInput--focus:border-violet-500/50",
                   )}
                 />
                 <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-midnight-400" />
@@ -218,10 +305,10 @@ export default function LoginPage() {
               whileHover={{ scale: isLoading ? 1 : 1.02 }}
               whileTap={{ scale: isLoading ? 1 : 0.98 }}
               className={cn(
-                'w-full py-3.5 rounded-xl font-semibold text-white',
-                'bg-gradient-to-r from-saffron-500 to-violet-500',
-                'hover:shadow-saffron-glow transition-all duration-300',
-                'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none'
+                "w-full py-3.5 rounded-xl font-semibold text-white",
+                "bg-gradient-to-r from-saffron-500 to-violet-500",
+                "hover:shadow-saffron-glow transition-all duration-300",
+                "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none",
               )}
             >
               {isLoading ? (
@@ -237,11 +324,11 @@ export default function LoginPage() {
 
           {/* Terms */}
           <p className="mt-6 text-xs text-center text-midnight-400">
-            {currentText.termsText}{' '}
+            {currentText.termsText}{" "}
             <Link href="/terms" className="text-violet-400 hover:underline">
               {currentText.terms}
-            </Link>{' '}
-            {currentText.and}{' '}
+            </Link>{" "}
+            {currentText.and}{" "}
             <Link href="/privacy" className="text-violet-400 hover:underline">
               {currentText.privacy}
             </Link>

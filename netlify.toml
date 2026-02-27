@@ -1,0 +1,96 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# Bandhan AI - Netlify Configuration
+# ──────────────────────────────────────────────────────────────────────────────
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+  environment = { NEXT_PUBLIC_DEMO_MODE = "true", NEXT_PUBLIC_API_URL = "/api/mock", NEXT_PUBLIC_FIREBASE_MOCK = "true" }
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Demo Mode Environment Variables
+# ──────────────────────────────────────────────────────────────────────────────
+[build.environment]
+  NEXT_PUBLIC_DEMO_MODE = "true"
+  NEXT_PUBLIC_API_URL = "/api/mock"
+  NEXT_PUBLIC_FIREBASE_MOCK = "true"
+  NEXT_PUBLIC_APP_NAME = "Bandhan AI"
+  NEXT_PUBLIC_APP_URL = "https://bandhan-ai-demo.netlify.app"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Redirects for Mock API
+# ──────────────────────────────────────────────────────────────────────────────
+[[redirects]]
+  from = "/api/*"
+  to = "/api/mock/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/auth/*"
+  to = "/api/mock/auth/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/matches/*"
+  to = "/api/mock/matches/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/chat/*"
+  to = "/api/mock/chat/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/profile/*"
+  to = "/api/mock/profile/:splat"
+  status = 200
+  force = true
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Security Headers
+# ──────────────────────────────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Demo-Mode = "true"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Functions Configuration
+# ──────────────────────────────────────────────────────────────────────────────
+[functions]
+  directory = ".next/server/functions"
+  node_bundler = "esbuild"
+  external_node_modules = ["firebase-admin"]
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Plugins
+# ──────────────────────────────────────────────────────────────────────────────
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Dev Server
+# ──────────────────────────────────────────────────────────────────────────────
+[dev]
+  command = "npm run dev"
+  port = 3000
+  publish = ".next"
+  autoLaunch = false

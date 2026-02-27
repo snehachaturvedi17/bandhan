@@ -1,0 +1,100 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "framework": "nextjs",
+
+  "regions": ["sin1"],
+
+  "env": {
+    "NEXT_PUBLIC_DEMO_MODE": "true",
+    "NEXT_PUBLIC_API_URL": "/api/mock",
+    "NEXT_PUBLIC_FIREBASE_MOCK": "true",
+    "NEXT_PUBLIC_APP_NAME": "Bandhan AI",
+    "NEXT_PUBLIC_APP_URL": "https://bandhan-ai-demo.vercel.app"
+  },
+
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_DEMO_MODE": "true"
+    }
+  },
+
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        },
+        {
+          "key": "X-Demo-Mode",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/mock/:path*"
+    },
+    {
+      "source": "/api/auth/:path*",
+      "destination": "/api/mock/auth/:path*"
+    },
+    {
+      "source": "/api/matches/:path*",
+      "destination": "/api/mock/matches/:path*"
+    },
+    {
+      "source": "/api/chat/:path*",
+      "destination": "/api/mock/chat/:path*"
+    },
+    {
+      "source": "/api/profile/:path*",
+      "destination": "/api/mock/profile/:path*"
+    }
+  ],
+
+  "crons": [],
+
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 10
+    }
+  },
+
+  "outputDirectory": ".next"
+}
