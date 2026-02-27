@@ -221,13 +221,13 @@ export default function LifeArchitecturePage() {
   useEffect(() => {
     if (pincodeValue && pincodeValue.length === 6) {
       const matches = indianCities.filter((c) => c.pincode === pincodeValue);
-      setCitySuggestions(matches);
+      setCitySuggestions(matches as any);
 
       if (matches.length === 1) {
         setValue("city", matches[0].city);
       }
     } else {
-      setCitySuggestions([]);
+      setCitySuggestions([] as any);
     }
   }, [pincodeValue, setValue]);
 
