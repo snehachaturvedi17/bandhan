@@ -100,7 +100,7 @@ interface TProps {
   k: string;
   params?: Record<string, string | number>;
   className?: string;
-  component?: keyof JSX.IntrinsicElements;
+  component?: 'span' | 'div' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'li' | 'a';
   children?: React.ReactNode;
 }
 
