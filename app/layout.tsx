@@ -103,7 +103,6 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: "Bandhan AI - Premium Matchmaking",
-        altHi: "बंधन एआई - प्रीमियम मैचमेकिंग",
       },
     ],
   },
